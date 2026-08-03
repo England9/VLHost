@@ -24,9 +24,28 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ## Cloudflare Deployment
 
+Workers Builds settings (Cloudflare dashboard → Settings → Build):
+
+| Setting | Value |
+|---------|-------|
+| **Build command** | *(leave empty — build runs via `wrangler.jsonc`)* |
+| **Deploy command** | `npx wrangler deploy` |
+| **Root directory** | `/` |
+
+Or use explicit OpenNext commands:
+
+| Setting | Value |
+|---------|-------|
+| **Build command** | `npx opennextjs-cloudflare build` |
+| **Deploy command** | `npx opennextjs-cloudflare deploy` |
+
+Local commands:
+
 ```bash
-npm run preview   # Local preview in Workers runtime
-npm run deploy    # Deploy to Cloudflare
+npm run cf:build    # Build for Cloudflare Workers
+npm run cf:deploy   # Deploy pre-built output
+npm run preview     # Local Workers runtime preview
+npm run deploy      # Build + deploy
 ```
 
 ## Pages
