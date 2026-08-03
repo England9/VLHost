@@ -28,11 +28,14 @@ Workers Builds settings (Cloudflare dashboard → Settings → Build):
 
 | Setting | Value |
 |---------|-------|
-| **Build command** | *(leave empty — build runs via `wrangler.jsonc`)* |
+| **Build command** | *(leave empty)* |
 | **Deploy command** | `npx wrangler deploy` |
 | **Root directory** | `/` |
+| **Branch** | `main` (or your active feature branch) |
 
-Or use explicit OpenNext commands:
+The project auto-builds during `npm ci` in CI via `postinstall`, so an empty build command works with `npx wrangler deploy`.
+
+Recommended explicit setup (faster, no postinstall build):
 
 | Setting | Value |
 |---------|-------|
