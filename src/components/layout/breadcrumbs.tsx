@@ -9,7 +9,7 @@ interface BreadcrumbsProps {
 export function Breadcrumbs({ items }: BreadcrumbsProps) {
   return (
     <nav aria-label="Breadcrumb" className="container-luxury py-6 pt-24 md:pt-28">
-      <ol className="flex items-center gap-2 text-[11px] tracking-luxury uppercase text-foreground-muted">
+      <ol className="flex flex-wrap items-center justify-center gap-2 text-[11px] tracking-luxury uppercase text-foreground-muted">
         {items.map((item, index) => (
           <li key={index} className="flex items-center gap-2">
             {index > 0 && <ChevronRight className="h-3 w-3" />}

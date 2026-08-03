@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Image from "next/image";
@@ -18,7 +19,6 @@ import {
   breadcrumbJsonLd,
 } from "@/lib/seo";
 import { getProductBySlug, products } from "@/data";
-import { formatPrice } from "@/lib/utils";
 
 interface ProductPageProps {
   params: Promise<{ slug: string }>;
@@ -93,16 +93,13 @@ export default async function ProductPage({ params }: ProductPageProps) {
             <h1 className="font-display text-4xl md:text-5xl text-foreground">
               {product.name}
             </h1>
-            <p className="mt-4 text-2xl text-foreground">
-              {formatPrice(product.price)}
-            </p>
             <p className="mt-6 text-foreground-muted leading-relaxed">
               {product.longDescription}
             </p>
 
             <div className="mt-8 hidden md:block">
-              <Button size="lg" className="w-full max-w-sm">
-                Add to Bag
+              <Button size="lg" className="w-full max-w-sm" asChild>
+                <Link href="/contact">Inquire with Concierge</Link>
               </Button>
             </div>
 

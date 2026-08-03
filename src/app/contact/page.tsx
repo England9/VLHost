@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Breadcrumbs } from "@/components/layout/breadcrumbs";
+import { PageHero } from "@/components/layout/page-hero";
 import { ContactForm } from "@/components/contact/contact-form";
 import { Newsletter } from "@/components/sections/newsletter";
 import {
@@ -24,25 +25,20 @@ export default function ContactPage() {
     <>
       <JsonLd data={faqJsonLd(faqs)} />
 
+      <PageHero
+        title="Contact"
+        subtitle="Concierge"
+        description="Our concierge team is available to assist with appointments, inquiries, and any questions about the VULCIRA world."
+        image="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1920&q=80"
+        imageAlt="VULCIRA concierge — luxury interior"
+      />
+
       <Breadcrumbs
         items={[
           { label: "Home", href: "/" },
           { label: "Contact" },
         ]}
       />
-
-      <section className="container-luxury pb-6">
-        <p className="text-[11px] tracking-luxury uppercase text-accent mb-4">
-          Concierge
-        </p>
-        <h1 className="font-display text-4xl md:text-6xl text-foreground">
-          Contact
-        </h1>
-        <p className="mt-4 text-foreground-muted max-w-2xl leading-relaxed">
-          Our concierge team is available to assist with orders, appointments,
-          and any inquiries about the VULCIRA world.
-        </p>
-      </section>
 
       <section className="container-luxury section-padding pt-0">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">

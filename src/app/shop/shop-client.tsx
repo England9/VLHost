@@ -19,17 +19,8 @@ export function ShopClient() {
         ]}
       />
 
-      <section className="container-luxury pb-6">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-          <div>
-            <h1 className="font-display text-4xl md:text-6xl text-foreground">
-              Shop
-            </h1>
-            <p className="mt-3 text-foreground-muted max-w-lg">
-              A curated selection of fashion, cosmetics, and lifestyle objects —
-              each chosen for its enduring beauty and exceptional craftsmanship.
-            </p>
-          </div>
+      <section className="container-luxury -mt-4 pb-6">
+        <div className="flex justify-center">
           <FilterDrawer
             activeCategory={activeCategory}
             onCategoryChange={setActiveCategory}
@@ -38,7 +29,7 @@ export function ShopClient() {
       </section>
 
       <section className="container-luxury section-padding pt-0">
-        <p className="text-[11px] tracking-luxury uppercase text-foreground-muted mb-8">
+        <p className="text-[11px] tracking-luxury uppercase text-foreground-muted mb-8 text-center">
           {filteredProducts.length}{" "}
           {filteredProducts.length === 1 ? "Piece" : "Pieces"}
         </p>

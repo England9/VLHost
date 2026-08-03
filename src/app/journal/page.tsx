@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { createMetadata } from "@/lib/seo";
+import { PageHero } from "@/components/layout/page-hero";
 import { JournalCard } from "@/components/cards/journal-card";
 import { Breadcrumbs } from "@/components/layout/breadcrumbs";
-import { createMetadata } from "@/lib/seo";
 import { journalArticles } from "@/data";
 
 export const metadata: Metadata = createMetadata({
@@ -18,25 +19,20 @@ export default function JournalPage() {
 
   return (
     <>
+      <PageHero
+        title="Journal"
+        subtitle="Editorial"
+        description="Stories of craft, philosophy, and the world of VULCIRA — written with the same intention we bring to everything we create."
+        image="https://images.unsplash.com/photo-1483985988355-763728f19325?w=1920&q=80"
+        imageAlt="VULCIRA journal — editorial fashion"
+      />
+
       <Breadcrumbs
         items={[
           { label: "Home", href: "/" },
           { label: "Journal" },
         ]}
       />
-
-      <section className="container-luxury pb-6">
-        <p className="text-[11px] tracking-luxury uppercase text-accent mb-4">
-          Editorial
-        </p>
-        <h1 className="font-display text-4xl md:text-6xl text-foreground">
-          Journal
-        </h1>
-        <p className="mt-4 text-foreground-muted max-w-2xl leading-relaxed">
-          Stories of craft, philosophy, and the world of VULCIRA — written with
-          the same intention we bring to everything we create.
-        </p>
-      </section>
 
       <section className="container-luxury pb-12">
         <Link href={`/journal/${featured.slug}`} className="group block">

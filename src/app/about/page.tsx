@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import { Breadcrumbs } from "@/components/layout/breadcrumbs";
+import { PageHero } from "@/components/layout/page-hero";
 import { EditorialSection } from "@/components/sections/editorial-section";
 import { createMetadata } from "@/lib/seo";
 
@@ -47,37 +47,20 @@ const timeline = [
 export default function AboutPage() {
   return (
     <>
+      <PageHero
+        title="A House Built on Restraint"
+        subtitle="Our Story"
+        description="VULCIRA was born from a conviction that true luxury speaks in whispers, not shouts. We create for those who understand that permanence is the ultimate sophistication."
+        image="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1920&q=80"
+        imageAlt="VULCIRA flagship atelier interior"
+      />
+
       <Breadcrumbs
         items={[
           { label: "Home", href: "/" },
           { label: "About" },
         ]}
       />
-
-      <section className="container-luxury pb-6">
-        <p className="text-[11px] tracking-luxury uppercase text-accent mb-4">
-          Our Story
-        </p>
-        <h1 className="font-display text-4xl md:text-7xl text-foreground max-w-4xl leading-[1.05]">
-          A House Built on Restraint
-        </h1>
-        <p className="mt-6 text-foreground-muted text-lg leading-relaxed max-w-2xl">
-          VULCIRA was born from a conviction that true luxury speaks in whispers,
-          not shouts. We create for those who understand that permanence is the
-          ultimate sophistication.
-        </p>
-      </section>
-
-      <section className="relative aspect-[21/9] overflow-hidden">
-        <Image
-          src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1920&q=80"
-          alt="VULCIRA flagship atelier interior — minimalist luxury retail space"
-          fill
-          className="object-cover"
-          sizes="100vw"
-          priority
-        />
-      </section>
 
       <EditorialSection
         title="Craft as Philosophy"

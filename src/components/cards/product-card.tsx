@@ -5,7 +5,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import type { Product } from "@/types";
-import { formatPrice } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
 interface ProductCardProps {
@@ -15,6 +14,9 @@ interface ProductCardProps {
 
 export function ProductCard({ product, priority = false }: ProductCardProps) {
   const [isHovered, setIsHovered] = useState(false);
+  const primaryImage = product.images[0];
+
+  if (!primaryImage) return null;
 
   return (
     <motion.article
@@ -25,8 +27,8 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
       <Link href={`/shop/${product.slug}`} className="block">
         <div className="relative aspect-[3/4] overflow-hidden bg-background-secondary">
           <Image
-            src={product.images[0].src}
-            alt={product.images[0].alt}
+            src={primaryImage.src}
+            alt={primaryImage.alt}
             fill
             className="object-cover transition-opacity duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
             style={{ opacity: isHovered && product.hoverImage ? 0 : 1 }}
@@ -51,20 +53,20 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
               className="w-full"
               onClick={(e) => e.preventDefault()}
             >
-              Quick Add
+              Discover
             </Button>
           </div>
         </div>
 
-        <div className="mt-4 space-y-1">
+        <div className="mt-4 space-y-1 text-center md:text-left">
           <p className="text-[10px] tracking-luxury uppercase text-foreground-muted">
             {product.category}
           </p>
           <h3 className="font-display text-lg text-foreground group-hover:text-accent transition-colors duration-500">
             {product.name}
           </h3>
-          <p className="text-sm text-foreground-muted">
-            {formatPrice(product.price)}
+          <p className="text-sm text-foreground-muted line-clamp-2">
+            {product.description}
           </p>
         </div>
       </Link>

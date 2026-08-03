@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { formatPrice } from "@/lib/utils";
 import type { Product } from "@/types";
 
 interface StickyAddToBagProps {
@@ -11,7 +11,7 @@ interface StickyAddToBagProps {
 }
 
 export function StickyAddToBag({ product }: StickyAddToBagProps) {
-  const [added, setAdded] = useState(false);
+  const [inquired, setInquired] = useState(false);
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-border bg-background/95 backdrop-blur-md md:hidden">
@@ -28,18 +28,22 @@ export function StickyAddToBag({ product }: StickyAddToBagProps) {
           </div>
           <div className="min-w-0">
             <p className="text-sm truncate">{product.name}</p>
-            <p className="text-xs text-foreground-muted">
-              {formatPrice(product.price)}
+            <p className="text-xs text-foreground-muted capitalize">
+              {product.category}
             </p>
           </div>
         </div>
-        <Button
-          size="sm"
-          onClick={() => setAdded(true)}
-          disabled={added}
-        >
-          {added ? "Added" : "Add to Bag"}
-        </Button>
+        {inquired ? (
+          <Button size="sm" variant="outline" disabled>
+            Request Sent
+          </Button>
+        ) : (
+          <Button size="sm" asChild>
+            <Link href="/contact" onClick={() => setInquired(true)}>
+              Inquire
+            </Link>
+          </Button>
+        )}
       </div>
     </div>
   );

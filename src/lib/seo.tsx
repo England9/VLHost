@@ -110,8 +110,6 @@ export function productJsonLd(product: Product) {
     brand: { "@type": "Brand", name: SITE_CONFIG.name },
     offers: {
       "@type": "Offer",
-      price: product.price,
-      priceCurrency: "USD",
       availability: "https://schema.org/InStock",
       url: `${SITE_CONFIG.url}/shop/${product.slug}`,
     },
