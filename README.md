@@ -1,6 +1,3 @@
-<<<<<<< Updated upstream
-# VLHost
-=======
 # VULCIRA
 
 Luxury Fashion • Cosmetics • Lifestyle
@@ -47,4 +44,3 @@ npm run deploy    # Deploy to Cloudflare
 - Accent: Matte Champagne Gold `#C6A96B`
 - Display Font: Cormorant Garamond
 - Body Font: Inter
->>>>>>> Stashed changes
