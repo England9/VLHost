@@ -1,0 +1,54 @@
+"use client";
+
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+
+interface CartDrawerProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}
+
+export function CartDrawer({ open, onOpenChange }: CartDrawerProps) {
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="top-0 right-0 left-auto translate-x-0 translate-y-0 h-full max-w-md w-full border-l border-border bg-background-secondary p-0 sm:rounded-none">
+        <div className="flex flex-col h-full p-6">
+          <DialogHeader>
+            <DialogTitle>Your Bag</DialogTitle>
+          </DialogHeader>
+
+          <div className="flex-1 flex flex-col items-center justify-center text-center py-12">
+            <p className="text-foreground-muted text-sm">
+              Your bag is currently empty.
+            </p>
+            <p className="text-foreground-muted/60 text-xs mt-2 max-w-xs">
+              Discover our curated selection of fashion, cosmetics, and lifestyle objects.
+            </p>
+          </div>
+
+          <Separator />
+
+          <div className="pt-6 space-y-4">
+            <div className="flex justify-between text-sm">
+              <span className="text-foreground-muted">Subtotal</span>
+              <span>$0</span>
+            </div>
+            <Button
+              variant="outline"
+              className="w-full"
+              onClick={() => onOpenChange(false)}
+            >
+              Continue Shopping
+            </Button>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
