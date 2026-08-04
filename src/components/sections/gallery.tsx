@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { ContentImage } from "@/components/ui/content-image";
 import { motion } from "framer-motion";
 import { staggerContainer, staggerItem } from "@/lib/animations";
 
@@ -37,12 +37,10 @@ export function ImageGrid({ images, columns = 3 }: ImageGridProps) {
             index === 0 && columns === 3 ? "md:row-span-2 md:aspect-auto aspect-[3/4]" : "aspect-[3/4]"
           }`}
         >
-          <Image
+          <ContentImage
             src={image.src}
             alt={image.alt}
-            fill
-            className="object-cover hover:scale-105 transition-transform duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
-            sizes="(max-width: 768px) 50vw, 33vw"
+            className="hover:scale-105 transition-transform duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
           />
         </motion.div>
       ))}

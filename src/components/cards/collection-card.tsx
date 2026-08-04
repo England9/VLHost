@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
+import { ContentImage } from "@/components/ui/content-image";
 import { motion } from "framer-motion";
 import type { Collection } from "@/types";
 
@@ -24,17 +24,11 @@ export function CollectionCard({
             size === "large" ? "aspect-[16/10]" : "aspect-[4/5]"
           }`}
         >
-          <Image
+          <ContentImage
             src={collection.image}
             alt={collection.imageAlt}
-            fill
-            className="object-cover transition-transform duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
-            sizes={
-              size === "large"
-                ? "(max-width: 768px) 100vw, 66vw"
-                : "(max-width: 768px) 100vw, 33vw"
-            }
             priority={priority}
+            className="transition-transform duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-background/20 to-transparent" />
           <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">

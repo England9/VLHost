@@ -2,10 +2,10 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { motion } from "framer-motion";
 import type { Product } from "@/types";
 import { Button } from "@/components/ui/button";
+import { ContentImage } from "@/components/ui/content-image";
 
 interface ProductCardProps {
   product: Product;
@@ -26,27 +26,28 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
     >
       <Link href={`/shop/${product.slug}`} className="block">
         <div className="relative aspect-[3/4] overflow-hidden bg-background-secondary">
-          <Image
+          <ContentImage
             src={primaryImage.src}
             alt={primaryImage.alt}
-            fill
-            className="object-cover transition-opacity duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
-            style={{ opacity: isHovered && product.hoverImage ? 0 : 1 }}
-            sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
             priority={priority}
+            className="transition-opacity duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
+            style={
+              isHovered && product.hoverImage
+                ? { opacity: 0 }
+                : { opacity: 1 }
+            }
           />
           {product.hoverImage && (
-            <Image
+            <ContentImage
               src={product.hoverImage}
-              alt={`${product.name} — alternate view`}
-              fill
-              className="object-cover transition-opacity duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
+              alt=""
+              aria-hidden
+              className="transition-opacity duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
               style={{ opacity: isHovered ? 1 : 0 }}
-              sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
             />
           )}
 
-          <div className="absolute inset-x-0 bottom-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+          <div className="absolute inset-x-0 bottom-0 z-10 p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
             <Button
               variant="default"
               size="sm"

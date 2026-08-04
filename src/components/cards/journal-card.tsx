@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
+import { ContentImage } from "@/components/ui/content-image";
 import { motion } from "framer-motion";
 import type { JournalArticle } from "@/types";
 
@@ -15,13 +15,11 @@ export function JournalCard({ article, priority = false }: JournalCardProps) {
     <motion.article className="group">
       <Link href={`/journal/${article.slug}`} className="block">
         <div className="relative aspect-[16/10] overflow-hidden bg-background-secondary">
-          <Image
+          <ContentImage
             src={article.image}
             alt={article.imageAlt}
-            fill
-            className="object-cover transition-transform duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
-            sizes="(max-width: 768px) 100vw, 50vw"
             priority={priority}
+            className="transition-transform duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
           />
         </div>
         <div className="mt-6 space-y-3">

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
+import { ContentImage } from "@/components/ui/content-image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import type { Product } from "@/types";
@@ -18,12 +18,9 @@ export function StickyAddToBag({ product }: StickyAddToBagProps) {
       <div className="container-luxury flex items-center justify-between py-4 gap-4">
         <div className="flex items-center gap-3 min-w-0">
           <div className="relative w-12 h-14 shrink-0 overflow-hidden bg-background-secondary">
-            <Image
+            <ContentImage
               src={product.images[0].src}
               alt={product.images[0].alt}
-              fill
-              className="object-cover"
-              sizes="48px"
             />
           </div>
           <div className="min-w-0">

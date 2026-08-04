@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
+import { ContentImage } from "@/components/ui/content-image";
 import { Search } from "lucide-react";
 import {
   Dialog,
@@ -84,12 +84,9 @@ export function SearchOverlay({ open, onOpenChange }: SearchOverlayProps) {
                   className="flex items-center gap-4 p-3 hover:bg-background-secondary transition-colors group"
                 >
                   <div className="relative w-16 h-20 overflow-hidden bg-background-secondary shrink-0">
-                    <Image
+                    <ContentImage
                       src={product.images[0].src}
                       alt={product.images[0].alt}
-                      fill
-                      className="object-cover"
-                      sizes="64px"
                     />
                   </div>
                   <div>
@@ -118,12 +115,9 @@ export function SearchOverlay({ open, onOpenChange }: SearchOverlayProps) {
                   className="flex items-center gap-4 p-3 hover:bg-background-secondary transition-colors group"
                 >
                   <div className="relative w-16 h-20 overflow-hidden bg-background-secondary shrink-0">
-                    <Image
+                    <ContentImage
                       src={collection.image}
                       alt={collection.imageAlt}
-                      fill
-                      className="object-cover"
-                      sizes="64px"
                     />
                   </div>
                   <p className="text-sm group-hover:text-accent transition-colors">
@@ -147,12 +141,9 @@ export function SearchOverlay({ open, onOpenChange }: SearchOverlayProps) {
                   className="flex items-center gap-4 p-3 hover:bg-background-secondary transition-colors group"
                 >
                   <div className="relative w-16 h-20 overflow-hidden bg-background-secondary shrink-0">
-                    <Image
+                    <ContentImage
                       src={article.image}
                       alt={article.imageAlt}
-                      fill
-                      className="object-cover"
-                      sizes="64px"
                     />
                   </div>
                   <p className="text-sm group-hover:text-accent transition-colors">

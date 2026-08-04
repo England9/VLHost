@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import Image from "next/image";
 import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 import { ProductCard } from "@/components/cards/product-card";
 import {
@@ -150,19 +149,15 @@ export default async function CollectionDetailPage({
 
       <Breadcrumbs items={breadcrumbs} />
 
-      <section className="relative min-h-[50vh] flex items-end overflow-hidden">
-        <div className="absolute inset-0">
-          <Image
-            src={collection!.image}
-            alt={collection!.imageAlt}
-            fill
-            className="object-cover"
-            priority
-            sizes="100vw"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
-        </div>
-        <div className="relative container-luxury pb-16 pt-32">
+      <section className="relative min-h-[50vh] flex items-end overflow-hidden bg-background-secondary">
+        <div
+          className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: `url("${collection!.image}")` }}
+          role="img"
+          aria-label={collection!.imageAlt}
+        />
+        <div className="absolute inset-0 z-[1] bg-gradient-to-t from-background via-background/60 to-transparent" />
+        <div className="relative z-10 container-luxury pb-16 pt-32">
           <p className="text-[11px] tracking-luxury uppercase text-accent mb-4">
             Collection
           </p>

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import Image from "next/image";
+import { ContentImage } from "@/components/ui/content-image";
 import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 import { JournalCard } from "@/components/cards/journal-card";
 import {
@@ -88,13 +88,10 @@ export default async function JournalArticlePage({
           </p>
         </header>
 
-        <div className="relative aspect-[21/9] overflow-hidden">
-          <Image
+        <div className="relative aspect-[21/9] overflow-hidden bg-background-secondary">
+          <ContentImage
             src={article.image}
             alt={article.imageAlt}
-            fill
-            className="object-cover"
-            sizes="100vw"
             priority
           />
         </div>

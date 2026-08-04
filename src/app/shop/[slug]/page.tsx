@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import Image from "next/image";
+import { ContentImage } from "@/components/ui/content-image";
 import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 import { ProductCard } from "@/components/cards/product-card";
 import { StickyAddToBag } from "@/components/product/sticky-add-to-bag";
@@ -74,12 +74,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 key={index}
                 className="relative aspect-[3/4] overflow-hidden bg-background-secondary"
               >
-                <Image
+                <ContentImage
                   src={image.src}
                   alt={image.alt}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 1024px) 100vw, 50vw"
                   priority={index === 0}
                 />
               </div>
