@@ -34,7 +34,7 @@ export const collections: Collection[] = [
     description: "Objects of permanence for the considered home.",
     longDescription:
       "Atelier presents a curated selection of lifestyle objects — hand-thrown ceramics, woven textiles, and sculptural vessels — each chosen for its material honesty and enduring beauty.",
-    image: "https://images.unsplash.com/photo-1616046229476-7fe3bbcaa0b7?w=1200&q=80",
+    image: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=1200&q=80",
     imageAlt: "Atelier collection — sculptural ceramics and textiles in a minimal interior",
     category: "lifestyle",
     productCount: 15,
@@ -90,10 +90,10 @@ export const products: Product[] = [
     category: "fashion",
     collection: "vestige",
     images: [
-      { src: "https://images.unsplash.com/photo-1539533018447-63fcce267634?w=800&q=80", alt: "Structured wool coat in charcoal — front view" },
-      { src: "https://images.unsplash.com/photo-1548624313-03916c9ee3bb?w=800&q=80", alt: "Structured wool coat — detail of horn buttons" },
+      { src: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800&q=80", alt: "Structured wool coat in charcoal — front view" },
+      { src: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=800&q=80", alt: "Structured wool coat — detail of horn buttons" },
     ],
-    hoverImage: "https://images.unsplash.com/photo-1548624313-03916c9ee3bb?w=800&q=80",
+    hoverImage: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=800&q=80",
     materials: ["100% Italian Virgin Wool", "Horn Buttons", "Silk Lining"],
     craftsmanship: "Hand-finished in our Milan atelier. Each coat requires over 40 hours of skilled tailoring, including hand-stitched buttonholes and canvas construction for lasting structure.",
     care: "Dry clean only. Store on a padded hanger in a breathable garment bag. Brush lightly after wear to maintain the wool's natural luster.",
@@ -133,7 +133,7 @@ export const products: Product[] = [
     category: "cosmetics",
     collection: "lumiere",
     images: [
-      { src: "https://images.unsplash.com/photo-1608248543801-ba9778537b8a?w=800&q=80", alt: "Radiance Serum in matte glass bottle" },
+      { src: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=800&q=80", alt: "Radiance Serum in matte glass bottle" },
       { src: "https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=800&q=80", alt: "Radiance Serum — texture detail on skin" },
     ],
     hoverImage: "https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=800&q=80",
@@ -155,7 +155,7 @@ export const products: Product[] = [
     category: "cosmetics",
     collection: "essence",
     images: [
-      { src: "https://images.unsplash.com/photo-1547887537-615f4b34c252?w=800&q=80", alt: "Noir Parfum in sculptural glass flacon" },
+      { src: "https://images.unsplash.com/photo-1541643600914-78b084683601?w=800&q=80", alt: "Noir Parfum in sculptural glass flacon" },
       { src: "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=800&q=80", alt: "Noir Parfum — fragrance notes arrangement" },
     ],
     hoverImage: "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=800&q=80",
@@ -197,10 +197,10 @@ export const products: Product[] = [
     category: "lifestyle",
     collection: "atelier",
     images: [
-      { src: "https://images.unsplash.com/photo-1578500494197-80f7ee2b09af?w=800&q=80", alt: "Hand-thrown ceramic vessel in warm stone glaze" },
-      { src: "https://images.unsplash.com/photo-1578500494197-80f7ee2b09af?w=800&q=80", alt: "Ceramic vessel — sculptural form detail" },
+      { src: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&q=80", alt: "Hand-thrown ceramic vessel in warm stone glaze" },
+      { src: "https://images.unsplash.com/photo-1600607687644-c7171b42498f?w=800&q=80", alt: "Ceramic vessel — sculptural form detail" },
     ],
-    hoverImage: "https://images.unsplash.com/photo-1578500494197-80f7ee2b09af?w=800&q=80",
+    hoverImage: "https://images.unsplash.com/photo-1600607687644-c7171b42498f?w=800&q=80",
     materials: ["Stoneware Clay", "Matte Glaze"],
     craftsmanship: "Hand-thrown and glazed by Yuki Tanaka. Each piece is unique, signed, and numbered. Fired at 1280°C for durability.",
     care: "Wipe clean with a damp cloth. Not suitable for direct food contact. Display away from direct sunlight to preserve glaze integrity.",
@@ -237,7 +237,7 @@ export const products: Product[] = [
     category: "cosmetics",
     collection: "essence",
     images: [
-      { src: "https://images.unsplash.com/photo-1586495777744-4413f210b4c3?w=800&q=80", alt: "Velvet Lip Colour in deep rose shade" },
+      { src: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=800&q=80", alt: "Velvet Lip Colour in deep rose shade" },
       { src: "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=800&q=80", alt: "Velvet Lip Colour — swatch on model" },
     ],
     hoverImage: "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=800&q=80",
@@ -279,7 +279,7 @@ export const products: Product[] = [
     category: "fashion",
     collection: "vestige",
     images: [
-      { src: "https://images.unsplash.com/photo-1591369809027-43178a139af6?w=800&q=80", alt: "Architect blazer in navy — front view" },
+      { src: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800&q=80", alt: "Architect blazer in navy — front view" },
       { src: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=800&q=80", alt: "Architect blazer — tailoring detail" },
     ],
     hoverImage: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=800&q=80",
@@ -319,7 +319,7 @@ export const products: Product[] = [
     category: "lifestyle",
     collection: "atelier",
     images: [
-      { src: "https://images.unsplash.com/photo-1602874801006-5a29b8536f3f?w=800&q=80", alt: "Hand-blown candleholder in smoked glass" },
+      { src: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=800&q=80", alt: "Hand-blown candleholder in smoked glass" },
       { src: "https://images.unsplash.com/photo-1600607687644-c7171b42498f?w=800&q=80", alt: "Candleholder — ambient interior styling" },
     ],
     hoverImage: "https://images.unsplash.com/photo-1600607687644-c7171b42498f?w=800&q=80",
@@ -345,7 +345,7 @@ This philosophy guides every decision we make, from the selection of raw materia
 Quiet luxury is not about having less. It is about choosing more carefully. Each object in the VULCIRA world is selected for its ability to endure — aesthetically, materially, emotionally. These are pieces that become part of your life, not part of a season.
 
 We invite you to discover what it means to dress, to adorn, to inhabit your space with intention.`,
-    image: "https://images.unsplash.com/photo-1483985988355-763728f19325?w=1200&q=80",
+    image: "https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=1200&q=80",
     imageAlt: "Editorial fashion photography — model in minimalist luxury attire",
     category: "Philosophy",
     author: "Isabelle Laurent",

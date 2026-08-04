@@ -23,7 +23,7 @@ export default function JournalPage() {
         title="Journal"
         subtitle="Editorial"
         description="Stories of craft, philosophy, and the world of VULCIRA — written with the same intention we bring to everything we create."
-        image="https://images.unsplash.com/photo-1483985988355-763728f19325?w=1920&q=80"
+        image="https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=1920&q=80"
         imageAlt="VULCIRA journal — editorial fashion"
       />
 
