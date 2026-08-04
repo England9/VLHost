@@ -40,20 +40,17 @@ export function Navbar() {
     <>
       <header
         className={cn(
-          "fixed top-0 left-0 right-0 z-50 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]",
+          "fixed top-0 left-0 right-0 z-50 overflow-visible transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]",
           scrolled || !isHome
             ? "bg-background/90 backdrop-blur-md border-b border-border"
             : "bg-transparent"
         )}
       >
-        <nav
-          className="container-luxury relative"
-          aria-label="Main navigation"
-        >
+        <nav className="container-luxury" aria-label="Main navigation">
           {/* Mobile */}
-          <div className="flex md:hidden h-16 items-center justify-between">
+          <div className="flex md:hidden h-16 items-center justify-between gap-3">
             <button
-              className="text-foreground hover:text-accent transition-colors"
+              className="shrink-0 text-foreground hover:text-accent transition-colors"
               onClick={() => setMobileOpen(!mobileOpen)}
               aria-label={mobileOpen ? "Close menu" : "Open menu"}
             >
@@ -71,17 +68,17 @@ export function Navbar() {
               {SITE_CONFIG.name}
             </Link>
 
-            <div className="flex items-center gap-3">
+            <div className="flex shrink-0 items-center gap-3">
               <button
                 onClick={() => setSearchOpen(true)}
-                className="text-foreground/70 hover:text-accent transition-colors"
+                className="p-1 text-foreground/70 hover:text-accent transition-colors"
                 aria-label="Search"
               >
                 <Search className="h-4 w-4" />
               </button>
               <button
                 onClick={() => setCartOpen(true)}
-                className="text-foreground/70 hover:text-accent transition-colors"
+                className="p-1 text-foreground/70 hover:text-accent transition-colors"
                 aria-label="Shopping bag"
               >
                 <ShoppingBag className="h-4 w-4" />
@@ -89,41 +86,45 @@ export function Navbar() {
             </div>
           </div>
 
-          {/* Desktop — centered editorial layout */}
-          <div className="hidden md:flex flex-col items-center py-5 lg:py-6">
-            <div className="absolute right-0 top-1/2 -translate-y-1/2 flex items-center gap-5">
+          {/* Desktop — symmetric grid keeps logo centered and icons fully visible */}
+          <div className="hidden md:grid md:grid-cols-[1fr_auto_1fr] md:items-start md:gap-4 lg:gap-8 py-5 lg:py-6">
+            <div aria-hidden="true" />
+
+            <div className="flex flex-col items-center min-w-0">
+              <Link
+                href="/"
+                className="font-display text-3xl lg:text-4xl tracking-[0.2em] text-foreground hover:text-accent transition-colors duration-500"
+              >
+                {SITE_CONFIG.name}
+              </Link>
+
+              <ul className="mt-5 flex flex-wrap items-center justify-center gap-x-8 lg:gap-x-10 gap-y-2">
+                {NAV_ITEMS.map((item) => (
+                  <li key={item.href}>
+                    <Link href={item.href} className={navLinkClass(item.href)}>
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="flex items-center justify-end gap-4 lg:gap-5 shrink-0 pt-1 pr-1">
               <button
                 onClick={() => setSearchOpen(true)}
-                className="text-foreground/70 hover:text-accent transition-colors duration-500"
+                className="p-1.5 text-foreground/70 hover:text-accent transition-colors duration-500"
                 aria-label="Search"
               >
                 <Search className="h-4 w-4" />
               </button>
               <button
                 onClick={() => setCartOpen(true)}
-                className="text-foreground/70 hover:text-accent transition-colors duration-500"
+                className="p-1.5 text-foreground/70 hover:text-accent transition-colors duration-500"
                 aria-label="Shopping bag"
               >
                 <ShoppingBag className="h-4 w-4" />
               </button>
             </div>
-
-            <Link
-              href="/"
-              className="font-display text-3xl lg:text-4xl tracking-[0.2em] text-foreground hover:text-accent transition-colors duration-500"
-            >
-              {SITE_CONFIG.name}
-            </Link>
-
-            <ul className="mt-5 flex flex-wrap items-center justify-center gap-x-8 lg:gap-x-10 gap-y-2">
-              {NAV_ITEMS.map((item) => (
-                <li key={item.href}>
-                  <Link href={item.href} className={navLinkClass(item.href)}>
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
           </div>
         </nav>
 

@@ -45,7 +45,7 @@ export default function HomePage() {
         title="Quiet Confidence"
         subtitle="Spring / Summer 2026"
         description="A new chapter in understated luxury. Discover collections conceived with architectural precision and crafted for permanence."
-        image="https://images.unsplash.com/photo-1483985988355-763728f19325?w=1920&q=80"
+        image="https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=1920&q=80&auto=format&fit=crop"
         imageAlt="VULCIRA Spring Summer 2026 — editorial fashion hero"
         cta={{ label: "Explore Collection", href: "/collections" }}
         secondaryCta={{ label: "Shop Now", href: "/shop" }}

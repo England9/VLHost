@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { fadeInUp } from "@/lib/animations";
@@ -29,23 +28,19 @@ export function Hero({
 }: HeroProps) {
   return (
     <section
-      className={`relative flex items-end overflow-hidden ${
+      className={`relative flex items-end overflow-hidden bg-background-secondary ${
         fullScreen ? "min-h-screen" : "min-h-[70vh]"
       }`}
     >
-      <div className="absolute inset-0">
-        <Image
-          src={image}
-          alt={imageAlt}
-          fill
-          className="object-cover"
-          priority
-          sizes="100vw"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-background/20" />
-      </div>
+      <div
+        className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: `url("${image}")` }}
+        role="img"
+        aria-label={imageAlt}
+      />
+      <div className="absolute inset-0 z-[1] bg-gradient-to-t from-background via-background/50 to-background/20" />
 
-      <div className="relative container-luxury pb-20 md:pb-32 pt-32 w-full">
+      <div className="relative z-10 container-luxury pb-20 md:pb-32 pt-32 w-full">
         <motion.div
           initial="initial"
           animate="animate"

@@ -1,5 +1,3 @@
-import Image from "next/image";
-
 interface PageHeroProps {
   title: string;
   subtitle?: string;
@@ -16,19 +14,15 @@ export function PageHero({
   imageAlt,
 }: PageHeroProps) {
   return (
-    <section className="relative min-h-[50vh] md:min-h-[60vh] flex items-end overflow-hidden">
-      <div className="absolute inset-0">
-        <Image
-          src={image}
-          alt={imageAlt}
-          fill
-          className="object-cover"
-          priority
-          sizes="100vw"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-background/30" />
-      </div>
-      <div className="relative container-luxury pb-12 md:pb-16 pt-32 w-full text-center">
+    <section className="relative min-h-[50vh] md:min-h-[60vh] flex items-end overflow-hidden bg-background-secondary">
+      <div
+        className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: `url("${image}")` }}
+        role="img"
+        aria-label={imageAlt}
+      />
+      <div className="absolute inset-0 z-[1] bg-gradient-to-t from-background via-background/70 to-background/30" />
+      <div className="relative z-10 container-luxury pb-12 md:pb-16 pt-32 w-full text-center">
         {subtitle && (
           <p className="text-[11px] tracking-luxury uppercase text-accent mb-4">
             {subtitle}
