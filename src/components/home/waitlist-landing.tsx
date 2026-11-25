@@ -7,6 +7,8 @@ import { Instagram } from "lucide-react";
 import { HeroLightingScene } from "@/components/lighting/hero-lighting-scene";
 import { WaitlistLightingScene } from "@/components/lighting/waitlist-lighting-scene";
 import { useFoliageWind } from "@/hooks/use-foliage-wind";
+import { useLightingControls } from "@/hooks/use-lighting-controls";
+import { LightingControlPanel } from "@/components/lighting/lighting-control-panel";
 import { SITE_CONFIG, EASING } from "@/lib/constants";
 
 function TikTokIcon({ className }: { className?: string }) {
@@ -29,6 +31,7 @@ export function WaitlistLanding() {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const prefersReducedMotion = useReducedMotion();
+  const { controls, update, reset } = useLightingControls();
   const [windActive, setWindActive] = useState(Boolean(prefersReducedMotion));
 
   useEffect(() => {
@@ -37,7 +40,11 @@ export function WaitlistLanding() {
     return () => window.clearTimeout(id);
   }, [prefersReducedMotion]);
 
-  const windRootRef = useFoliageWind(!prefersReducedMotion, windActive);
+  const windRootRef = useFoliageWind(
+    !prefersReducedMotion && controls.motionEnabled,
+    windActive,
+    controls
+  );
 
   const reveal = (delay: number, duration = 0.85) =>
     prefersReducedMotion
@@ -72,6 +79,7 @@ export function WaitlistLanding() {
     <div
       ref={windRootRef}
       data-foliage-wind
+      data-invert-mask={controls.invertMask ? "1" : "0"}
       className="landing-root relative flex min-h-[100dvh] flex-col bg-[#ded8d1] text-[#1a1a1a]"
     >
       <section className="relative flex min-h-[58vh] flex-1 flex-col border-b border-[#1a1a1a]/8 overflow-hidden md:min-h-[62vh]">
@@ -200,6 +208,12 @@ export function WaitlistLanding() {
           )}
         </motion.div>
       </section>
+
+      <LightingControlPanel
+        controls={controls}
+        onChange={update}
+        onReset={reset}
+      />
     </div>
   );
 }

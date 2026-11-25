@@ -6,47 +6,60 @@ import {
   reducedMotionFoliageWind,
   type FoliageWindVars,
 } from "@/lib/foliage-wind";
+import type { LightingControls } from "@/lib/lighting-controls";
+import { controlsToCssVars } from "@/lib/lighting-controls";
 
-const VAR_KEYS: (keyof FoliageWindVars)[] = [
+const WIND_KEYS: (keyof FoliageWindVars)[] = [
   "wx1",
   "wy1",
-  "wr1",
-  "wsx1",
-  "wsy1",
   "wx2",
   "wy2",
-  "wr2",
-  "wsx2",
-  "wsy2",
 ];
 
-function applyVars(el: HTMLElement, vars: FoliageWindVars) {
-  for (const key of VAR_KEYS) {
-    el.style.setProperty(`--${key}`, vars[key]);
+function applyWindMask(el: HTMLElement, vars: FoliageWindVars, scale: number) {
+  const parsePx = (s: string) => parseFloat(s) * scale;
+  el.style.setProperty("--mx", `${parsePx(vars.wx1)}px`);
+  el.style.setProperty("--my", `${parsePx(vars.wy1)}px`);
+  el.style.setProperty("--mx2", `${parsePx(vars.wx2)}px`);
+  el.style.setProperty("--my2", `${parsePx(vars.wy2)}px`);
+}
+
+function applyControls(el: HTMLElement, controls: LightingControls) {
+  const vars = controlsToCssVars(controls);
+  for (const [k, v] of Object.entries(vars)) {
+    el.style.setProperty(k, v);
   }
+  el.dataset.invertMask = controls.invertMask ? "1" : "0";
 }
 
-function mobileAmpScale(): number {
-  if (typeof window === "undefined") return 1;
-  const w = window.innerWidth;
-  if (w < 480) return 0.62;
-  if (w < 768) return 0.78;
-  return 1;
-}
-
-export function useFoliageWind(enabled: boolean, active: boolean) {
+export function useFoliageWind(
+  enabled: boolean,
+  active: boolean,
+  controls: LightingControls
+) {
   const rootRef = useRef<HTMLDivElement>(null);
   const pausedRef = useRef(false);
   const ampRef = useRef(1);
+  const controlsRef = useRef(controls);
+  controlsRef.current = controls;
 
   useEffect(() => {
     const updateAmp = () => {
-      ampRef.current = mobileAmpScale();
+      const w = window.innerWidth;
+      if (w < 480) ampRef.current = 0.62;
+      else if (w < 768) ampRef.current = 0.78;
+      else ampRef.current = 1;
     };
     updateAmp();
     window.addEventListener("resize", updateAmp, { passive: true });
     return () => window.removeEventListener("resize", updateAmp);
   }, []);
+
+  useEffect(() => {
+    const el = rootRef.current;
+    if (!el) return;
+    applyControls(el, controls);
+  }, [controls]);
 
   useEffect(() => {
     const el = rootRef.current;
@@ -75,8 +88,23 @@ export function useFoliageWind(enabled: boolean, active: boolean) {
     const el = rootRef.current;
     if (!el) return;
 
-    if (!enabled) {
-      applyVars(el, reducedMotionFoliageWind());
+    applyControls(el, controlsRef.current);
+
+    const holdStatic = () => {
+      el.style.setProperty("--mx", "0px");
+      el.style.setProperty("--my", "0px");
+      el.style.setProperty("--mx2", "0px");
+      el.style.setProperty("--my2", "0px");
+    };
+
+    if (!enabled || !controlsRef.current.motionEnabled) {
+      const vars = reducedMotionFoliageWind();
+      applyWindMask(el, vars, 0);
+      return;
+    }
+
+    if (!active) {
+      holdStatic();
       return;
     }
 
@@ -86,19 +114,26 @@ export function useFoliageWind(enabled: boolean, active: boolean) {
 
     const tick = (now: number) => {
       frame = requestAnimationFrame(tick);
-      if (!active || document.hidden || pausedRef.current) return;
+      if (document.hidden || pausedRef.current) return;
       const interval = ampRef.current < 1 ? 32 : 16;
       if (now - lastUpdate < interval) return;
       lastUpdate = now;
-      const t = (now - start) / 1000;
-      applyVars(el, computeFoliageWind(t, ampRef.current));
+      const t =
+        ((now - start) / 1000) *
+        controlsRef.current.windSpeed;
+      const vars = computeFoliageWind(t, ampRef.current);
+      applyWindMask(
+        el,
+        vars,
+        controlsRef.current.motionScale * ampRef.current
+      );
     };
 
-    applyVars(el, computeFoliageWind(0, ampRef.current));
+    holdStatic();
     frame = requestAnimationFrame(tick);
 
     return () => cancelAnimationFrame(frame);
-  }, [enabled, active]);
+  }, [enabled, active, controls.motionEnabled]);
 
   return rootRef;
 }

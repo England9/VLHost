@@ -3,17 +3,22 @@
 :root {
   --font-body: var(--font-inter);
   --foliage-texture: url("/lighting/vulcira_layers/foliage-shadow.webp");
+  --sun-reveal-mask: url("/lighting/vulcira_layers/foliage-sun-reveal.webp");
 
-  --wx1: 0px;
-  --wy1: 0px;
-  --wr1: 0deg;
-  --wsx1: 1;
-  --wsy1: 1;
-  --wx2: 0px;
-  --wy2: 0px;
-  --wr2: 0deg;
-  --wsx2: 1;
-  --wsy2: 1;
+  --lit-brightness: 2.05;
+  --lit-contrast: 1.14;
+  --lit-saturate: 1.06;
+  --lit-mix: 1;
+  --mask-scale: 128%;
+  --mask-ox: 0px;
+  --mask-oy: 0px;
+  --shadow-op: 0.08;
+  --layer-b-mix: 0.55;
+
+  --mx: 0px;
+  --my: 0px;
+  --mx2: 0px;
+  --my2: 0px;
 }
 
 @theme inline {
@@ -56,140 +61,88 @@ body {
   object-position: 68% center;
 }
 
+.waitlist-photo {
+  object-position: center;
+}
+
 @media (min-width: 768px) {
   .hero-photo {
     object-position: 72% 20%;
   }
 }
 
-.hero-lighting-field,
-.waitlist-lighting-field {
-  position: absolute;
-  inset: -30%;
-}
-
-/* Shared motion — sun + shadow move as one unit */
-.foliage-motion {
+.dual-exposure-plate {
   position: absolute;
   inset: 0;
-  transform-origin: 34% 42%;
-  backface-visibility: hidden;
-  will-change: transform;
-  pointer-events: none;
+  overflow: hidden;
 }
 
-.foliage-motion--a {
-  transform: translate3d(var(--wx1), var(--wy1), 0) rotate(var(--wr1))
-    scale(var(--wsx1), var(--wsy1));
-}
-
-.foliage-motion--b {
-  transform: translate3d(var(--wx2), var(--wy2), 0) rotate(var(--wr2))
-    scale(var(--wsx2), var(--wsy2));
-}
-
-.foliage-sun,
-.foliage-shade {
+.dual-base,
+.dual-lit {
   position: absolute;
   inset: 0;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 118%;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   pointer-events: none;
+  transform: none !important;
+  will-change: auto;
 }
 
-/**
- * Sun: warm afternoon fill, masked inverse of foliage (gaps = lit patches).
- * soft-light ≈ 20–35% exposure lift without white haze.
- */
-.foliage-sun {
-  background-image: linear-gradient(
-    158deg,
-    #f3e4d0 0%,
-    #fff6ec 42%,
-    #ead9c4 100%
-  );
-  mix-blend-mode: soft-light;
-  opacity: 0.52;
-  -webkit-mask-image: linear-gradient(#fff, #fff), var(--foliage-texture);
-  mask-image: linear-gradient(#fff, #fff), var(--foliage-texture);
-  -webkit-mask-size: 100% 100%, 118%;
-  mask-size: 100% 100%, 118%;
-  -webkit-mask-position: center, center;
-  mask-position: center, center;
+.dual-base {
+  z-index: 0;
+}
+
+.dual-lit {
+  z-index: 1;
+  filter: brightness(var(--lit-brightness)) contrast(var(--lit-contrast))
+    saturate(var(--lit-saturate));
   -webkit-mask-repeat: no-repeat;
   mask-repeat: no-repeat;
-  -webkit-mask-composite: destination-out;
-  mask-composite: subtract;
+  -webkit-mask-mode: alpha;
+  mask-mode: alpha;
 }
 
-.foliage-sun--b {
-  opacity: 0.34;
-  background-image: linear-gradient(
-    162deg,
-    #f0e0cc 0%,
-    #fff4e8 48%,
-    #e6d4be 100%
-  );
+.landing-root:not([data-invert-mask="1"]) .dual-lit {
+  -webkit-mask-image: var(--sun-reveal-mask);
+  mask-image: var(--sun-reveal-mask);
+  -webkit-mask-size: var(--mask-scale);
+  mask-size: var(--mask-scale);
 }
 
-/* Shadow: same foliage texture, multiply — secondary to sunlight */
-.foliage-shade {
+.landing-root[data-invert-mask="1"] .dual-lit {
+  -webkit-mask-image: var(--foliage-texture);
+  mask-image: var(--foliage-texture);
+  -webkit-mask-size: var(--mask-scale);
+  mask-size: var(--mask-scale);
+}
+
+.dual-lit--primary {
+  opacity: var(--lit-mix);
+  -webkit-mask-position: calc(50% + var(--mask-ox) + var(--mx))
+    calc(50% + var(--mask-oy) + var(--my));
+  mask-position: calc(50% + var(--mask-ox) + var(--mx))
+    calc(50% + var(--mask-oy) + var(--my));
+}
+
+.dual-lit--secondary {
+  z-index: 2;
+  opacity: calc(var(--lit-mix) * var(--layer-b-mix));
+  -webkit-mask-position: calc(50% + var(--mask-ox) + var(--mx2))
+    calc(50% + var(--mask-oy) + var(--my2));
+  mask-position: calc(50% + var(--mask-ox) + var(--mx2))
+    calc(50% + var(--mask-oy) + var(--my2));
+}
+
+.foliage-shadow-pass {
+  position: absolute;
+  inset: -28%;
+  z-index: 3;
+  background-size: var(--mask-scale);
+  background-position: calc(50% + var(--mask-ox) + var(--mx))
+    calc(50% + var(--mask-oy) + var(--my));
+  background-repeat: no-repeat;
   mix-blend-mode: multiply;
-  opacity: 0.14;
-  filter: blur(0.15px);
-}
-
-.foliage-shade--b {
-  opacity: 0.09;
-}
-
-/* Hero — slightly stronger sun on dark plate */
-.hero-lighting-field .foliage-sun {
-  opacity: 0.56;
-}
-
-.hero-lighting-field .foliage-sun--b {
-  opacity: 0.36;
-}
-
-.hero-lighting-field .foliage-shade {
-  opacity: 0.12;
-}
-
-.hero-lighting-field .foliage-shade--b {
-  opacity: 0.07;
-}
-
-/* Waitlist — matched rhythm, lighter base */
-.waitlist-lighting-field .foliage-motion--a {
-  transform: translate3d(
-      calc(var(--wx1) * 1.02 + 3px),
-      calc(var(--wy1) * 0.98),
-      0
-    )
-    rotate(var(--wr1)) scale(var(--wsx1), var(--wsy1));
-}
-
-.waitlist-lighting-field .foliage-motion--b {
-  transform: translate3d(
-      calc(var(--wx2) * 0.99 - 2px),
-      calc(var(--wy2) * 1.02),
-      0
-    )
-    rotate(var(--wr2)) scale(var(--wsx2), var(--wsy2));
-}
-
-.waitlist-lighting-field .foliage-sun {
-  opacity: 0.46;
-}
-
-.waitlist-lighting-field .foliage-sun--b {
-  opacity: 0.3;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .foliage-motion {
-    will-change: auto;
-  }
+  opacity: var(--shadow-op);
+  pointer-events: none;
 }
