@@ -39,7 +39,7 @@ Recommended explicit setup (faster, no postinstall build):
 
 | Setting | Value |
 |---------|-------|
-| **Build command** | `npx opennextjs-cloudflare build` |
+| **Build command** | `npx opennextjs-cloudflare build --dangerouslyUseUnsupportedNextVersion` |
 | **Deploy command** | `npx opennextjs-cloudflare deploy` |
 
 Local commands:

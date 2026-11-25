@@ -16,5 +16,8 @@ const isBuilt = existsSync(".open-next/worker.js");
 
 if (isCI && !isBuilt) {
   console.log("\n[vulcira] Running OpenNext build for Cloudflare Workers CI...\n");
-  execSync("npx opennextjs-cloudflare build", { stdio: "inherit" });
+  execSync(
+    "npx opennextjs-cloudflare build --dangerouslyUseUnsupportedNextVersion",
+    { stdio: "inherit" }
+  );
 }
