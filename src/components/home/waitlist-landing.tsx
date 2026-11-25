@@ -11,8 +11,6 @@ import { EASING } from "@/lib/constants";
 /** Clean editorial photo — no baked-in typography */
 const HERO_IMAGE = "/images/vulcira-hero-editorial.jpg";
 
-const TIKTOK_URL = "https://www.tiktok.com/@vulcira";
-
 function TikTokIcon({ className }: { className?: string }) {
   return (
     <svg
@@ -108,17 +106,10 @@ export function WaitlistLanding() {
         </motion.header>
 
         <motion.nav
-          className="absolute right-4 top-4 z-30 flex items-center gap-1 md:right-10 md:top-8 lg:right-14"
-          aria-label="Landing navigation"
+          className="absolute right-4 top-4 z-30 flex items-center gap-2 md:right-10 md:top-8 lg:right-14"
+          aria-label="Social links"
           {...reveal(1.6, 0.7)}
         >
-          <Link href="/about" className={linkClass}>
-            ABOUT
-          </Link>
-          <Link href="/journal" className={linkClass}>
-            JOURNAL
-          </Link>
-          <span className="mx-2 hidden h-4 w-px bg-white/50 sm:block" aria-hidden />
           <a
             href={SITE_CONFIG.social.instagram}
             target="_blank"
@@ -129,7 +120,7 @@ export function WaitlistLanding() {
             <Instagram className="h-4 w-4 stroke-[1.5]" />
           </a>
           <a
-            href={TIKTOK_URL}
+            href={SITE_CONFIG.social.tiktok}
             target="_blank"
             rel="noopener noreferrer"
             className={`${linkClass} px-2`}

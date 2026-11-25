@@ -1,25 +1,20 @@
 import type { MetadataRoute } from "next";
+import { SITE_CONFIG } from "@/lib/constants";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "VULCIRA",
-    short_name: "VULCIRA",
-    description:
-      "Luxury Fashion • Cosmetics • Lifestyle — Where quiet confidence meets architectural refinement.",
+    name: SITE_CONFIG.name,
+    short_name: SITE_CONFIG.name,
+    description: SITE_CONFIG.description,
     start_url: "/",
     display: "standalone",
-    background_color: "#111111",
-    theme_color: "#111111",
+    background_color: "#ded8d1",
+    theme_color: "#ded8d1",
     icons: [
       {
-        src: "/icon-192.png",
-        sizes: "192x192",
-        type: "image/png",
-      },
-      {
-        src: "/icon-512.png",
-        sizes: "512x512",
-        type: "image/png",
+        src: "/favicon.ico",
+        sizes: "any",
+        type: "image/x-icon",
       },
     ],
   };
