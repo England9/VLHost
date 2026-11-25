@@ -1,12 +1,14 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
+import { usePathname } from "next/navigation";
 import { EASING, DURATION } from "@/lib/constants";
 
 export function PageTransition({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
   const prefersReducedMotion = useReducedMotion();
 
-  if (prefersReducedMotion) {
+  if (prefersReducedMotion || pathname === "/") {
     return <>{children}</>;
   }
 

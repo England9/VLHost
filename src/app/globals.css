@@ -112,6 +112,15 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: 0.2em;
 }
 
+.font-landing {
+  font-family: var(--font-syne), var(--font-inter), system-ui, sans-serif;
+  font-weight: 400;
+}
+
+.landing-root {
+  -webkit-font-smoothing: antialiased;
+}
+
 .line-clamp-2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;

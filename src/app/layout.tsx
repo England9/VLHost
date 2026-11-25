@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Inter } from "next/font/google";
-import { Navbar } from "@/components/layout/navbar";
-import { Footer } from "@/components/layout/footer";
+import { Cormorant_Garamond, Inter, Syne } from "next/font/google";
+import { SiteChrome } from "@/components/layout/site-chrome";
 import { createMetadata, JsonLd, organizationJsonLd, websiteJsonLd } from "@/lib/seo";
 import "./globals.css";
 
@@ -18,6 +17,13 @@ const inter = Inter({
   display: "swap",
 });
 
+const syne = Syne({
+  variable: "--font-syne",
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  display: "swap",
+});
+
 export const metadata: Metadata = createMetadata({});
 
 export default function RootLayout({
@@ -26,18 +32,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${cormorant.variable} ${inter.variable}`}>
+    <html
+      lang="en"
+      className={`${cormorant.variable} ${inter.variable} ${syne.variable}`}
+    >
       <head>
-        <meta name="theme-color" content="#111111" />
+        <meta name="theme-color" content="#ded8d1" />
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/manifest.webmanifest" />
       </head>
       <body className="antialiased">
         <JsonLd data={[organizationJsonLd(), websiteJsonLd()]} />
-        <Navbar />
-        <main>{children}</main>
-        <Footer />
+        <SiteChrome>{children}</SiteChrome>
       </body>
     </html>
   );
