@@ -121,6 +121,71 @@ h1, h2, h3, h4, h5, h6 {
   -webkit-font-smoothing: antialiased;
 }
 
+@keyframes leaf-shadow-drift {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  25% {
+    transform: translate3d(28px, -12px, 0) rotate(0.6deg);
+  }
+  50% {
+    transform: translate3d(14px, 8px, 0) rotate(-0.4deg);
+  }
+  75% {
+    transform: translate3d(-22px, 14px, 0) rotate(0.3deg);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+}
+
+@keyframes leaf-shadow-drift-alt {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
+  }
+  33% {
+    transform: translate3d(-18px, 16px, 0) rotate(-0.5deg) scale(1.02);
+  }
+  66% {
+    transform: translate3d(24px, -10px, 0) rotate(0.4deg) scale(0.98);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
+  }
+}
+
+@keyframes leaf-shadow-drift-slow {
+  0% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0.35;
+  }
+  50% {
+    transform: translate3d(12px, 20px, 0);
+    opacity: 0.5;
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0.35;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .leaf-shadow-drift {
+    animation: leaf-shadow-drift 26s ease-in-out infinite;
+    will-change: transform;
+  }
+
+  .leaf-shadow-drift-alt {
+    animation: leaf-shadow-drift-alt 34s ease-in-out infinite;
+    will-change: transform;
+  }
+
+  .leaf-shadow-drift-slow {
+    animation: leaf-shadow-drift-slow 38s ease-in-out infinite;
+    will-change: transform, opacity;
+  }
+}
+
 .line-clamp-2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;
