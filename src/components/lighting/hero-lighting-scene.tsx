@@ -17,7 +17,7 @@ export function HeroLightingScene() {
       animate={{ opacity: 1 }}
       transition={{
         delay: heroDelay,
-        duration: 0.95,
+        duration: 0.9,
         ease: EASING,
       }}
     >

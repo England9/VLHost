@@ -1,34 +1,47 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { EASING } from "@/lib/constants";
+import {
+  dismissIntroCover,
+  finishIntroCover,
+} from "@/components/brand/intro-cover";
 
-export { ENTRANCE_TOTAL_S } from "@/lib/intro-timing";
+export { ENTRANCE_TOTAL_S, HERO_HANDOFF_S } from "@/lib/intro-timing";
 
 const REVEAL_SVG = "/brand/reveal-white.svg";
 
-export function VulciraLogoEntrance() {
+export function VulciraLogoEntrance({
+  onFinished,
+}: {
+  onFinished?: () => void;
+}) {
   const prefersReducedMotion = useReducedMotion();
   const svgHostRef = useRef<HTMLDivElement>(null);
   const [svgMarkup, setSvgMarkup] = useState<string | null>(null);
-  const [mounted, setMounted] = useState(false);
+  const [active, setActive] = useState(true);
   const [fading, setFading] = useState(false);
 
   useEffect(() => {
-    if (prefersReducedMotion) return;
-    setMounted(true);
+    if (prefersReducedMotion) {
+      setActive(false);
+      finishIntroCover();
+      onFinished?.();
+      return;
+    }
     fetch(REVEAL_SVG)
       .then((r) => r.text())
       .then(setSvgMarkup)
       .catch(() => setSvgMarkup(null));
-  }, [prefersReducedMotion]);
-
-  useEffect(() => {
-    if (!mounted || prefersReducedMotion) return;
     const fadeAt = window.setTimeout(() => setFading(true), 1480);
     return () => window.clearTimeout(fadeAt);
-  }, [mounted, prefersReducedMotion]);
+  }, [prefersReducedMotion, onFinished]);
+
+  useLayoutEffect(() => {
+    if (!active || prefersReducedMotion || !svgMarkup) return;
+    dismissIntroCover();
+  }, [active, prefersReducedMotion, svgMarkup]);
 
   useEffect(() => {
     if (!svgMarkup || !svgHostRef.current) return;
@@ -46,16 +59,19 @@ export function VulciraLogoEntrance() {
     }
   }, [svgMarkup]);
 
-  if (prefersReducedMotion || !mounted) return null;
+  if (!active || prefersReducedMotion) return null;
 
   return (
     <motion.div
-      className="logo-entrance pointer-events-none fixed inset-0 z-[90] flex items-center justify-center bg-[#0a0a0a]"
+      className="logo-entrance pointer-events-none fixed inset-0 z-[100] flex items-center justify-center bg-[#0a0a0a]"
       initial={{ opacity: 1 }}
       animate={{ opacity: fading ? 0 : 1 }}
       transition={{ duration: fading ? 0.55 : 0, ease: EASING }}
       onAnimationComplete={() => {
-        if (fading) setMounted(false);
+        if (!fading) return;
+        setActive(false);
+        finishIntroCover();
+        onFinished?.();
       }}
       aria-hidden
     >

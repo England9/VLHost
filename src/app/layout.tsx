@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Syne } from "next/font/google";
 import { createMetadata, JsonLd, organizationJsonLd, websiteJsonLd } from "@/lib/seo";
+import { IntroCoverTeardown } from "@/components/brand/intro-cover";
 import "./globals.css";
 
 const inter = Inter({
@@ -26,10 +27,33 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${syne.variable}`}>
       <head>
-        <meta name="theme-color" content="#ded8d1" />
+        <meta name="theme-color" content="#0a0a0a" />
         <link rel="manifest" href="/manifest.webmanifest" />
+        <link
+          rel="preload"
+          href="/brand/reveal-white.svg"
+          as="image"
+          type="image/svg+xml"
+        />
+        <style
+          dangerouslySetInnerHTML={{
+            __html: `#vulcira-intro-cover{position:fixed;inset:0;z-index:110;background:#0a0a0a;pointer-events:none}html:not([data-intro]) .landing-root{visibility:hidden}`,
+          }}
+        />
       </head>
       <body className="antialiased">
+        <div
+          id="vulcira-intro-cover"
+          className="fixed inset-0 z-[110] bg-[#0a0a0a]"
+          style={{
+            position: "fixed",
+            inset: 0,
+            zIndex: 110,
+            background: "#0a0a0a",
+          }}
+          aria-hidden
+        />
+        <IntroCoverTeardown />
         <JsonLd data={[organizationJsonLd(), websiteJsonLd()]} />
         {children}
       </body>
