@@ -8,15 +8,31 @@
   --wx1: 0px;
   --wy1: 0px;
   --wr1: 0deg;
+  --wsx1: 1;
+  --wsy1: 1;
+  --op1: 0.46;
+  --blur1: 0.45px;
   --wx2: 0px;
   --wy2: 0px;
   --wr2: 0deg;
+  --wsx2: 1;
+  --wsy2: 1;
+  --op2: 0.34;
+  --blur2: 0.18px;
   --wx3: 0px;
   --wy3: 0px;
   --wr3: 0deg;
+  --wsx3: 1;
+  --wsy3: 1;
+  --op3: 0.26;
+  --blur3: 0.95px;
   --wx4: 0px;
   --wy4: 0px;
   --wr4: 0deg;
+  --wsx4: 1;
+  --wsy4: 1;
+  --op4: 0.22;
+  --blur4: 0.28px;
 }
 
 @theme inline {
@@ -50,8 +66,6 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* —— Stationary plates + masked foliage (see vulcira_layers/README) —— */
-
 .hero-photo {
   object-position: 68% center;
 }
@@ -82,78 +96,82 @@ body {
 
 .foliage-layer {
   position: absolute;
-  inset: -10%;
+  inset: -14%;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   mix-blend-mode: multiply;
-  transform-origin: 38% 42%;
-  will-change: transform;
+  transform-origin: 36% 40%;
+  will-change: transform, opacity, filter;
   pointer-events: none;
 }
 
 .hero-shadow-mask .foliage-layer--branch {
-  transform: translate3d(var(--wx1), var(--wy1), 0) rotate(var(--wr1)) scale(1.07);
-  filter: blur(0.35px);
+  opacity: var(--op1);
+  transform: translate3d(var(--wx1), var(--wy1), 0) rotate(var(--wr1))
+    scale(var(--wsx1), var(--wsy1));
+  filter: blur(var(--blur1));
 }
 
 .hero-shadow-mask .foliage-layer--leaf {
-  transform: translate3d(var(--wx2), var(--wy2), 0) rotate(var(--wr2)) scale(1.11);
-  filter: blur(0.12px);
+  opacity: var(--op2);
+  transform: translate3d(var(--wx2), var(--wy2), 0) rotate(var(--wr2))
+    scale(var(--wsx2), var(--wsy2));
+  filter: blur(var(--blur2));
 }
 
 .hero-shadow-mask .foliage-layer--branch-alt {
-  transform: translate3d(var(--wx3), var(--wy3), 0) rotate(var(--wr3)) scale(1.05);
-  filter: blur(0.9px);
+  opacity: var(--op3);
+  transform: translate3d(var(--wx3), var(--wy3), 0) rotate(var(--wr3))
+    scale(var(--wsx3), var(--wsy3));
+  filter: blur(var(--blur3));
 }
 
 .hero-shadow-mask .foliage-layer--leaf-alt {
-  transform: translate3d(var(--wx4), var(--wy4), 0) rotate(var(--wr4)) scale(1.13);
-  filter: blur(0.2px);
+  opacity: var(--op4);
+  transform: translate3d(var(--wx4), var(--wy4), 0) rotate(var(--wr4))
+    scale(var(--wsx4), var(--wsy4));
+  filter: blur(var(--blur4));
 }
 
 .waitlist-shadow-field .foliage-layer--branch {
+  opacity: calc(var(--op3) * 1.05);
   transform: translate3d(
-      calc(var(--wx3) * 1.02 + 2px),
-      calc(var(--wy3) * 0.96),
+      calc(var(--wx3) * 1.04 + 3px),
+      calc(var(--wy3) * 0.98),
       0
     )
-    rotate(var(--wr3))
-    scale(1.09);
-  filter: blur(0.4px);
+    rotate(var(--wr3)) scale(var(--wsx3), var(--wsy3));
+  filter: blur(var(--blur3));
 }
 
 .waitlist-shadow-field .foliage-layer--leaf {
+  opacity: calc(var(--op4) * 1.02);
   transform: translate3d(
-      calc(var(--wx4) * 1.04 - 1px),
-      calc(var(--wy4) * 1.02),
+      calc(var(--wx4) * 1.06 - 2px),
+      calc(var(--wy4) * 1.04),
       0
     )
-    rotate(var(--wr4))
-    scale(1.12);
-  filter: blur(0.15px);
+    rotate(var(--wr4)) scale(var(--wsx4), var(--wsy4));
+  filter: blur(var(--blur4));
 }
 
 .waitlist-shadow-field .foliage-layer--branch-alt {
+  opacity: calc(var(--op1) * 0.95);
   transform: translate3d(
-      calc(var(--wx1) * 0.92 + 4px),
-      calc(var(--wy1) * 0.88),
+      calc(var(--wx1) * 0.94 + 5px),
+      calc(var(--wy1) * 0.9),
       0
     )
-    rotate(var(--wr1))
-    scale(1.06);
-  filter: blur(1.1px);
+    rotate(var(--wr1)) scale(var(--wsx1), var(--wsy1));
+  filter: blur(var(--blur1));
 }
 
 .waitlist-shadow-field .foliage-layer--leaf-alt {
-  transform: translate3d(
-      calc(var(--wx2) * 0.95),
-      calc(var(--wy2) * 1.05),
-      0
-    )
-    rotate(var(--wr2))
-    scale(1.14);
-  filter: blur(0.25px);
+  opacity: calc(var(--op2) * 0.92);
+  transform: translate3d(calc(var(--wx2) * 0.96), calc(var(--wy2) * 1.08), 0)
+    rotate(var(--wr2)) scale(var(--wsx2), var(--wsy2));
+  filter: blur(var(--blur2));
 }
 
 @media (prefers-reduced-motion: reduce) {
