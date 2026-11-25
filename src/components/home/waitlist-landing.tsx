@@ -80,9 +80,10 @@ export function WaitlistLanding() {
       ref={windRootRef}
       data-foliage-wind
       data-invert-mask={controls.invertMask ? "1" : "0"}
+      data-dev-mode={controls.devMode ? "1" : "0"}
       className="landing-root relative flex min-h-[100dvh] flex-col bg-[#ded8d1] text-[#1a1a1a]"
     >
-      <section className="relative flex min-h-[58vh] flex-1 flex-col border-b border-[#1a1a1a]/8 overflow-hidden md:min-h-[62vh]">
+      <section className="landing-section-lit relative flex min-h-[58vh] flex-1 flex-col border-b border-[#1a1a1a]/8 overflow-hidden md:min-h-[62vh]">
         <HeroLightingScene />
 
         {/* 0.3s — wordmark */}
@@ -151,7 +152,7 @@ export function WaitlistLanding() {
         </motion.div>
       </section>
 
-      <section className="relative z-10 min-h-[38vh] overflow-hidden px-6 py-12 md:px-10 md:py-16 lg:px-14">
+      <section className="landing-section-lit relative z-10 min-h-[38vh] overflow-hidden px-6 py-12 md:px-10 md:py-16 lg:px-14">
         <WaitlistLightingScene />
 
         {/* 1.6s — waitlist */}

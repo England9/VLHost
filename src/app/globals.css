@@ -19,6 +19,14 @@
   --my: 0px;
   --mx2: 0px;
   --my2: 0px;
+
+  --shadow-wind-x: 0px;
+  --shadow-wind-y: 0px;
+  --shadow-dev-x: 0px;
+  --shadow-dev-y: 0px;
+  --shadow-dev-rot: 0deg;
+  --shadow-dev-scale: 1;
+  --shadow-texture-scale: 128%;
 }
 
 @theme inline {
@@ -75,6 +83,13 @@ body {
   position: absolute;
   inset: 0;
   overflow: hidden;
+}
+
+.landing-root[data-dev-mode="1"] .dual-exposure-plate,
+.landing-root[data-dev-mode="1"] .hero-plate,
+.landing-root[data-dev-mode="1"] .waitlist-plate,
+.landing-root[data-dev-mode="1"] .landing-section-lit {
+  overflow: visible;
 }
 
 .dual-base,
@@ -134,15 +149,32 @@ body {
     calc(50% + var(--mask-oy) + var(--my2));
 }
 
+.shadow-stack {
+  position: absolute;
+  inset: -70%;
+  z-index: 3;
+  pointer-events: none;
+}
+
 .foliage-shadow-pass {
   position: absolute;
-  inset: -28%;
-  z-index: 3;
-  background-size: var(--mask-scale);
-  background-position: calc(50% + var(--mask-ox) + var(--mx))
-    calc(50% + var(--mask-oy) + var(--my));
+  inset: 0;
+  background-size: var(--shadow-texture-scale, var(--mask-scale));
+  background-position: center;
   background-repeat: no-repeat;
   mix-blend-mode: multiply;
   opacity: var(--shadow-op);
+  transform-origin: center center;
+  transform: translate3d(
+      calc(var(--mask-ox) + var(--shadow-wind-x) + var(--shadow-dev-x)),
+      calc(var(--mask-oy) + var(--shadow-wind-y) + var(--shadow-dev-y)),
+      0
+    )
+    rotate(var(--shadow-dev-rot)) scale(var(--shadow-dev-scale));
   pointer-events: none;
+}
+
+.landing-root[data-dev-mode="1"] .shadow-stack {
+  outline: 1px dashed rgba(232, 200, 154, 0.35);
+  outline-offset: -1px;
 }

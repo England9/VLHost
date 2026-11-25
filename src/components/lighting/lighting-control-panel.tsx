@@ -51,6 +51,7 @@ function SliderRow({
 
 export function LightingControlPanel({ controls, onChange, onReset }: Props) {
   const [open, setOpen] = useState(true);
+  const shadowMax = controls.devMode ? 1.2 : 0.45;
 
   return (
     <div
@@ -70,10 +71,23 @@ export function LightingControlPanel({ controls, onChange, onReset }: Props) {
 
         {open && (
           <div className="max-h-[70vh] space-y-3 overflow-y-auto p-3">
-            <p className="text-[9px] leading-relaxed text-white/55">
-              Dual exposure: ambient base + filtered copy revealed through
-              foliage-sun-reveal mask (gaps = sunlight). Motion moves mask only.
-            </p>
+            <div className="flex flex-wrap gap-2">
+              <Toggle
+                label="Dev mode"
+                on={controls.devMode}
+                onChange={(v) => onChange({ devMode: v })}
+              />
+              <Toggle
+                label="Motion"
+                on={controls.motionEnabled}
+                onChange={(v) => onChange({ motionEnabled: v })}
+              />
+              <Toggle
+                label="Invert mask"
+                on={controls.invertMask}
+                onChange={(v) => onChange({ invertMask: v })}
+              />
+            </div>
 
             <SliderRow
               label="Sun brightness"
@@ -119,8 +133,8 @@ export function LightingControlPanel({ controls, onChange, onReset }: Props) {
             <SliderRow
               label="Mask offset X"
               value={controls.maskOffsetX}
-              min={-120}
-              max={120}
+              min={controls.devMode ? -200 : -120}
+              max={controls.devMode ? 200 : 120}
               step={1}
               format={(v) => `${v}px`}
               onChange={(v) => onChange({ maskOffsetX: v })}
@@ -128,8 +142,8 @@ export function LightingControlPanel({ controls, onChange, onReset }: Props) {
             <SliderRow
               label="Mask offset Y"
               value={controls.maskOffsetY}
-              min={-120}
-              max={120}
+              min={controls.devMode ? -200 : -120}
+              max={controls.devMode ? 200 : 120}
               step={1}
               format={(v) => `${v}px`}
               onChange={(v) => onChange({ maskOffsetY: v })}
@@ -146,7 +160,7 @@ export function LightingControlPanel({ controls, onChange, onReset }: Props) {
               label="Shadow multiply"
               value={controls.shadowOpacity}
               min={0}
-              max={0.45}
+              max={shadowMax}
               step={0.01}
               onChange={(v) => onChange({ shadowOpacity: v })}
             />
@@ -167,18 +181,102 @@ export function LightingControlPanel({ controls, onChange, onReset }: Props) {
               onChange={(v) => onChange({ windSpeed: v })}
             />
 
-            <div className="flex flex-wrap gap-2 pt-1">
-              <Toggle
-                label="Motion"
-                on={controls.motionEnabled}
-                onChange={(v) => onChange({ motionEnabled: v })}
-              />
-              <Toggle
-                label="Invert mask"
-                on={controls.invertMask}
-                onChange={(v) => onChange({ invertMask: v })}
-              />
-            </div>
+            {controls.devMode && (
+              <div className="space-y-3 border-t border-[#e8c89a]/25 pt-3">
+                <p className="text-[9px] tracking-[0.15em] text-[#e8c89a]/90 uppercase">
+                  Shadow laboratory
+                </p>
+
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-[10px] text-white/80">Multiply stacks</span>
+                  <div className="flex gap-1">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        onChange({
+                          shadowStacks: Math.max(1, controls.shadowStacks - 1),
+                        })
+                      }
+                      className="h-7 w-8 rounded border border-white/20 text-white/80"
+                    >
+                      −
+                    </button>
+                    <span className="flex h-7 min-w-8 items-center justify-center tabular-nums text-white/70">
+                      {controls.shadowStacks}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        onChange({
+                          shadowStacks: Math.min(8, controls.shadowStacks + 1),
+                        })
+                      }
+                      className="h-7 w-8 rounded border border-white/20 text-white/80"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+
+                <Toggle
+                  label="Shadow free of wind"
+                  on={controls.shadowUnlinkWind}
+                  onChange={(v) => onChange({ shadowUnlinkWind: v })}
+                />
+
+                <SliderRow
+                  label="Shadow X"
+                  value={controls.shadowDevX}
+                  min={-900}
+                  max={900}
+                  step={2}
+                  format={(v) => `${v}px`}
+                  onChange={(v) => onChange({ shadowDevX: v })}
+                />
+                <SliderRow
+                  label="Shadow Y"
+                  value={controls.shadowDevY}
+                  min={-900}
+                  max={900}
+                  step={2}
+                  format={(v) => `${v}px`}
+                  onChange={(v) => onChange({ shadowDevY: v })}
+                />
+                <SliderRow
+                  label="Shadow rotate"
+                  value={controls.shadowDevRotate}
+                  min={-180}
+                  max={180}
+                  step={1}
+                  format={(v) => `${v}°`}
+                  onChange={(v) => onChange({ shadowDevRotate: v })}
+                />
+                <SliderRow
+                  label="Shadow scale"
+                  value={controls.shadowDevScale}
+                  min={0.35}
+                  max={2.5}
+                  step={0.01}
+                  onChange={(v) => onChange({ shadowDevScale: v })}
+                />
+
+                <button
+                  type="button"
+                  onClick={() =>
+                    onChange({
+                      shadowStacks: controls.shadowStacks + 1,
+                      shadowOpacity: Math.min(
+                        1.2,
+                        controls.shadowOpacity + 0.06
+                      ),
+                    })
+                  }
+                  className="w-full rounded border border-[#e8c89a]/35 bg-[#e8c89a]/10 py-2 text-[10px] tracking-wider text-[#f5e6d3]"
+                >
+                  + Stack &amp; intensity
+                </button>
+              </div>
+            )}
 
             <div className="flex gap-2 pt-1">
               <button

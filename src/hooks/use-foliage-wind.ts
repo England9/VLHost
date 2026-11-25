@@ -9,13 +9,6 @@ import {
 import type { LightingControls } from "@/lib/lighting-controls";
 import { controlsToCssVars } from "@/lib/lighting-controls";
 
-const WIND_KEYS: (keyof FoliageWindVars)[] = [
-  "wx1",
-  "wy1",
-  "wx2",
-  "wy2",
-];
-
 function applyWindMask(el: HTMLElement, vars: FoliageWindVars, scale: number) {
   const parsePx = (s: string) => parseFloat(s) * scale;
   el.style.setProperty("--mx", `${parsePx(vars.wx1)}px`);
@@ -30,6 +23,7 @@ function applyControls(el: HTMLElement, controls: LightingControls) {
     el.style.setProperty(k, v);
   }
   el.dataset.invertMask = controls.invertMask ? "1" : "0";
+  el.dataset.devMode = controls.devMode ? "1" : "0";
 }
 
 export function useFoliageWind(
@@ -98,8 +92,7 @@ export function useFoliageWind(
     };
 
     if (!enabled || !controlsRef.current.motionEnabled) {
-      const vars = reducedMotionFoliageWind();
-      applyWindMask(el, vars, 0);
+      if (!enabled) holdStatic();
       return;
     }
 
@@ -119,8 +112,7 @@ export function useFoliageWind(
       if (now - lastUpdate < interval) return;
       lastUpdate = now;
       const t =
-        ((now - start) / 1000) *
-        controlsRef.current.windSpeed;
+        ((now - start) / 1000) * controlsRef.current.windSpeed;
       const vars = computeFoliageWind(t, ampRef.current);
       applyWindMask(
         el,

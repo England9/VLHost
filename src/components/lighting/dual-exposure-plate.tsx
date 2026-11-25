@@ -1,6 +1,7 @@
 "use client";
 
 import { LIGHTING_ASSETS } from "@/lib/foliage-wind";
+import { useLightingControls } from "@/hooks/use-lighting-controls";
 
 type DualExposurePlateProps = {
   photoSrc: string;
@@ -9,14 +10,15 @@ type DualExposurePlateProps = {
   fetchPriority?: "high" | "low" | "auto";
 };
 
-/** Ambient base + filtered exposures; only mask-position animates. */
 export function DualExposurePlate({
   photoSrc,
   photoClass,
   plateClass,
   fetchPriority,
 }: DualExposurePlateProps) {
+  const { controls } = useLightingControls();
   const foliage = `url(${LIGHTING_ASSETS.foliage})`;
+  const stacks = Math.min(8, Math.max(1, Math.round(controls.shadowStacks)));
 
   return (
     <div className={`dual-exposure-plate ${plateClass}`}>
@@ -45,11 +47,16 @@ export function DualExposurePlate({
         decoding="async"
       />
 
-      <div
-        className="foliage-shadow-pass"
-        style={{ backgroundImage: foliage }}
-        aria-hidden
-      />
+      <div className="shadow-stack" aria-hidden>
+        {Array.from({ length: stacks }).map((_, i) => (
+          <div
+            key={i}
+            className="foliage-shadow-pass"
+            style={{ backgroundImage: foliage }}
+            data-stack={i}
+          />
+        ))}
+      </div>
     </div>
   );
 }
