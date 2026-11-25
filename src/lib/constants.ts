@@ -6,7 +6,7 @@ export const SITE_CONFIG = {
   url: process.env.NEXT_PUBLIC_SITE_URL || "https://vulcira.com",
   locale: "en_US",
   social: {
-    instagram: "https://instagram.com/vulcira",
+    instagram: "https://instagram.com/vulcira.official",
     tiktok: "https://www.tiktok.com/@vulcira",
   },
 } as const;
