@@ -10,6 +10,9 @@
   --lit-saturate: 1.3;
   --lit-mix: 1;
   --mask-scale: 128%;
+  --mask-size-px: 1638px;
+  --mask-rotate: 0deg;
+  --dapple-orient-scale: 1;
   --mask-ox: 0px;
   --mask-oy: 0px;
   --shadow-op: 0;
@@ -118,18 +121,29 @@ body {
   mask-mode: alpha;
 }
 
+.dapple-orient {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  transform: rotate(var(--mask-rotate, 0deg))
+    scale(var(--dapple-orient-scale, 1));
+  transform-origin: center center;
+  pointer-events: none;
+  overflow: hidden;
+}
+
 .landing-root:not([data-invert-mask="1"]) .dual-lit {
   -webkit-mask-image: var(--sun-reveal-mask);
   mask-image: var(--sun-reveal-mask);
-  -webkit-mask-size: var(--mask-scale);
-  mask-size: var(--mask-scale);
+  -webkit-mask-size: var(--mask-size-px, 1638px);
+  mask-size: var(--mask-size-px, 1638px);
 }
 
 .landing-root[data-invert-mask="1"] .dual-lit {
   -webkit-mask-image: var(--foliage-texture);
   mask-image: var(--foliage-texture);
-  -webkit-mask-size: var(--mask-scale);
-  mask-size: var(--mask-scale);
+  -webkit-mask-size: var(--mask-size-px, 1638px);
+  mask-size: var(--mask-size-px, 1638px);
 }
 
 .dual-lit--primary {
@@ -159,7 +173,7 @@ body {
 .foliage-shadow-pass {
   position: absolute;
   inset: 0;
-  background-size: var(--shadow-texture-scale, var(--mask-scale));
+  background-size: var(--mask-size-px, 1638px);
   background-position: center;
   background-repeat: no-repeat;
   mix-blend-mode: multiply;

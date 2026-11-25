@@ -8,6 +8,7 @@ import {
 } from "@/lib/foliage-wind";
 import type { LightingControls } from "@/lib/lighting-controls";
 import { controlsToCssVars } from "@/lib/lighting-controls";
+import { applyDappleViewport } from "@/lib/dapple-viewport";
 
 function applyWindMask(el: HTMLElement, vars: FoliageWindVars, scale: number) {
   const parsePx = (s: string) => parseFloat(s) * scale;
@@ -24,6 +25,7 @@ function applyControls(el: HTMLElement, controls: LightingControls) {
   }
   el.dataset.invertMask = controls.invertMask ? "1" : "0";
   el.dataset.devMode = controls.devMode ? "1" : "0";
+  applyDappleViewport(el, controls.maskScale);
 }
 
 export function useFoliageWind(
@@ -33,20 +35,21 @@ export function useFoliageWind(
 ) {
   const rootRef = useRef<HTMLDivElement>(null);
   const pausedRef = useRef(false);
-  const ampRef = useRef(1);
   const controlsRef = useRef(controls);
   controlsRef.current = controls;
 
   useEffect(() => {
-    const updateAmp = () => {
-      const w = window.innerWidth;
-      if (w < 480) ampRef.current = 0.62;
-      else if (w < 768) ampRef.current = 0.78;
-      else ampRef.current = 1;
+    const sync = () => {
+      const el = rootRef.current;
+      if (el) applyDappleViewport(el, controlsRef.current.maskScale);
     };
-    updateAmp();
-    window.addEventListener("resize", updateAmp, { passive: true });
-    return () => window.removeEventListener("resize", updateAmp);
+    sync();
+    window.addEventListener("resize", sync, { passive: true });
+    window.addEventListener("orientationchange", sync);
+    return () => {
+      window.removeEventListener("resize", sync);
+      window.removeEventListener("orientationchange", sync);
+    };
   }, []);
 
   useEffect(() => {
@@ -91,8 +94,12 @@ export function useFoliageWind(
       el.style.setProperty("--my2", "0px");
     };
 
-    if (!enabled || !controlsRef.current.motionEnabled) {
-      if (!enabled) holdStatic();
+    if (!controlsRef.current.motionEnabled) {
+      holdStatic();
+      return;
+    }
+
+    if (!enabled) {
       return;
     }
 
@@ -108,20 +115,15 @@ export function useFoliageWind(
     const tick = (now: number) => {
       frame = requestAnimationFrame(tick);
       if (document.hidden || pausedRef.current) return;
-      const interval = ampRef.current < 1 ? 32 : 16;
-      if (now - lastUpdate < interval) return;
+      if (now - lastUpdate < 16) return;
       lastUpdate = now;
       const t =
         ((now - start) / 1000) * controlsRef.current.windSpeed;
-      const vars = computeFoliageWind(t, ampRef.current);
-      applyWindMask(
-        el,
-        vars,
-        controlsRef.current.motionScale * ampRef.current
-      );
+      const vars = computeFoliageWind(t, 1);
+      applyWindMask(el, vars, controlsRef.current.motionScale);
     };
 
-    holdStatic();
+    applyWindMask(el, computeFoliageWind(0, 1), 0);
     frame = requestAnimationFrame(tick);
 
     return () => cancelAnimationFrame(frame);

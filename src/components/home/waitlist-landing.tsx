@@ -43,11 +43,9 @@ export function WaitlistLanding() {
   const [entranceShift, setEntranceShift] = useState(0);
 
   useEffect(() => {
-    if (prefersReducedMotion) return;
-    try {
-      if (sessionStorage.getItem("vulcira-entrance-done") === "1") return;
-    } catch {
-      /* ignore */
+    if (prefersReducedMotion) {
+      setEntranceShift(0);
+      return;
     }
     setEntranceShift(ENTRANCE_TOTAL_S);
   }, [prefersReducedMotion]);

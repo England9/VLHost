@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { EASING } from "@/lib/constants";
 
 export const ENTRANCE_TOTAL_S = 1.35;
+const LOGO_SRC = "/brand/reveal-symbol.png";
 
 export function VulciraLogoEntrance({
   onComplete,
@@ -12,47 +13,37 @@ export function VulciraLogoEntrance({
   onComplete?: () => void;
 }) {
   const prefersReducedMotion = useReducedMotion();
-  const [visible, setVisible] = useState(true);
+  const [play, setPlay] = useState(false);
   const [phase, setPhase] = useState<"construction" | "primary" | "exit">(
     "construction"
   );
 
-  const skip = useMemo(() => {
-    if (prefersReducedMotion) return true;
-    try {
-      return sessionStorage.getItem("vulcira-entrance-done") === "1";
-    } catch {
-      return false;
-    }
-  }, [prefersReducedMotion]);
-
   useEffect(() => {
-    if (skip) {
-      setVisible(false);
+    if (prefersReducedMotion) {
       onComplete?.();
       return;
     }
+    setPlay(true);
+  }, [prefersReducedMotion, onComplete]);
 
-    const t1 = window.setTimeout(() => setPhase("primary"), 520);
-    const t2 = window.setTimeout(() => setPhase("exit"), 920);
+  useEffect(() => {
+    if (!play) return;
+
+    const t1 = window.setTimeout(() => setPhase("primary"), 500);
+    const t2 = window.setTimeout(() => setPhase("exit"), 880);
     const t3 = window.setTimeout(() => {
-      setVisible(false);
-      try {
-        sessionStorage.setItem("vulcira-entrance-done", "1");
-      } catch {
-        /* ignore */
-      }
+      setPlay(false);
       onComplete?.();
-    }, 1320);
+    }, ENTRANCE_TOTAL_S * 1000);
 
     return () => {
       window.clearTimeout(t1);
       window.clearTimeout(t2);
       window.clearTimeout(t3);
     };
-  }, [skip, onComplete]);
+  }, [play, onComplete]);
 
-  if (skip || !visible) return null;
+  if (!play) return null;
 
   return (
     <motion.div
@@ -60,37 +51,33 @@ export function VulciraLogoEntrance({
       initial={{ opacity: 1 }}
       animate={{ opacity: phase === "exit" ? 0 : 1 }}
       transition={{
-        duration: phase === "exit" ? 0.45 : 0,
+        duration: phase === "exit" ? 0.48 : 0,
         ease: EASING,
       }}
       aria-hidden
     >
-      <div className="logo-entrance__frame relative h-[min(62vw,340px)] w-[min(62vw,340px)]">
+      <div className="logo-entrance__frame relative h-[min(72vw,380px)] w-[min(72vw,380px)]">
         <motion.img
-          src="/brand/reveal-construction.png"
-          alt=""
-          className="absolute inset-0 h-full w-full object-contain logo-entrance__construction"
-          initial={{ opacity: 0, filter: "invert(1) contrast(1.1)" }}
-          animate={{
-            opacity: phase === "construction" ? 1 : 0,
-            filter:
-              phase === "construction"
-                ? "invert(1) contrast(2.4) brightness(0.95)"
-                : "invert(1) contrast(1.1)",
-          }}
-          transition={{ duration: 0.42, ease: EASING }}
-        />
-        <motion.img
-          src="/brand/reveal-symbol.png"
+          src={LOGO_SRC}
           alt=""
           className="absolute inset-0 h-full w-full object-contain"
-          initial={{ opacity: 0, scale: 0.992, filter: "invert(1)" }}
+          initial={{ opacity: 0, filter: "invert(1) contrast(3) brightness(0.88)" }}
+          animate={{
+            opacity: phase === "construction" ? 1 : 0,
+          }}
+          transition={{ duration: 0.4, ease: EASING }}
+        />
+        <motion.img
+          src={LOGO_SRC}
+          alt=""
+          className="absolute inset-0 h-full w-full object-contain"
+          initial={{ opacity: 0, scale: 0.988 }}
           animate={{
             opacity: phase !== "construction" ? 1 : 0,
-            scale: phase === "primary" || phase === "exit" ? 1 : 0.992,
-            filter: "invert(1) brightness(1.02)",
+            scale: 1,
+            filter: "invert(1) contrast(1.05) brightness(1.02)",
           }}
-          transition={{ duration: 0.48, ease: EASING }}
+          transition={{ duration: 0.5, ease: EASING }}
         />
       </div>
     </motion.div>

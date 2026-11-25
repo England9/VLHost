@@ -31,31 +31,31 @@ export function DualExposurePlate({
         decoding="async"
       />
 
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={photoSrc}
-        alt=""
-        className={`dual-lit dual-lit--primary ${photoClass}`}
-        decoding="async"
-      />
-
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={photoSrc}
-        alt=""
-        className={`dual-lit dual-lit--secondary ${photoClass}`}
-        decoding="async"
-      />
-
-      <div className="shadow-stack" aria-hidden>
-        {Array.from({ length: stacks }).map((_, i) => (
-          <div
-            key={i}
-            className="foliage-shadow-pass"
-            style={{ backgroundImage: foliage }}
-            data-stack={i}
-          />
-        ))}
+      <div className="dapple-orient" aria-hidden>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={photoSrc}
+          alt=""
+          className={`dual-lit dual-lit--primary ${photoClass}`}
+          decoding="async"
+        />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={photoSrc}
+          alt=""
+          className={`dual-lit dual-lit--secondary ${photoClass}`}
+          decoding="async"
+        />
+        <div className="shadow-stack">
+          {Array.from({ length: stacks }).map((_, i) => (
+            <div
+              key={i}
+              className="foliage-shadow-pass"
+              style={{ backgroundImage: foliage }}
+              data-stack={i}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );
