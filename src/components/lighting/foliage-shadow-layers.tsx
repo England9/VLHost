@@ -2,18 +2,22 @@
 
 import { LIGHTING_ASSETS } from "@/lib/foliage-wind";
 
-/** Two multiply shadow passes — branch + finer leaf texture */
 export function FoliageShadowLayers() {
   const bg = `url(${LIGHTING_ASSETS.foliage})`;
   return (
     <>
       <div
-        className="foliage-layer foliage-layer--branch"
+        className="foliage-layer foliage-layer--a"
         style={{ backgroundImage: bg }}
         aria-hidden
       />
       <div
-        className="foliage-layer foliage-layer--leaf"
+        className="foliage-layer foliage-layer--b"
+        style={{ backgroundImage: bg }}
+        aria-hidden
+      />
+      <div
+        className="foliage-layer foliage-layer--c"
         style={{ backgroundImage: bg }}
         aria-hidden
       />

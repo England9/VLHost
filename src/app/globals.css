@@ -2,7 +2,6 @@
 
 :root {
   --font-body: var(--font-inter);
-  --vulcira-mask: url("/lighting/vulcira_layers/hero-shadow-mask-soft.png");
 
   --wx1: 0px;
   --wy1: 0px;
@@ -14,6 +13,11 @@
   --wr2: 0deg;
   --wsx2: 1;
   --wsy2: 1;
+  --wx3: 0px;
+  --wy3: 0px;
+  --wr3: 0deg;
+  --wsx3: 1;
+  --wsy3: 1;
 }
 
 @theme inline {
@@ -47,7 +51,11 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Hero plate — photo + masked shadows, 28% overscan on shadow field */
+.hero-plate,
+.waitlist-plate {
+  isolation: isolate;
+}
+
 .hero-photo {
   object-position: 68% center;
 }
@@ -61,73 +69,76 @@ body {
 .hero-shadow-field,
 .waitlist-shadow-field {
   position: absolute;
-  inset: -28%;
-}
-
-.hero-shadow-field {
-  -webkit-mask-image: var(--vulcira-mask);
-  mask-image: var(--vulcira-mask);
-  mask-size: cover;
-  mask-repeat: no-repeat;
-  mask-position: 68% center;
-  -webkit-mask-size: cover;
-  -webkit-mask-repeat: no-repeat;
-  -webkit-mask-position: 68% center;
-}
-
-@media (min-width: 768px) {
-  .hero-shadow-field {
-    mask-position: 72% 20%;
-    -webkit-mask-position: 72% 20%;
-  }
+  inset: -30%;
 }
 
 .foliage-layer {
   position: absolute;
   inset: 0;
-  background-size: 118%;
+  background-size: 120%;
   background-position: center;
   background-repeat: no-repeat;
   mix-blend-mode: multiply;
   transform-origin: 34% 42%;
+  backface-visibility: hidden;
   will-change: transform;
   pointer-events: none;
 }
 
-/* Fixed opacity — movement via transform only (no haze / smoke) */
-.hero-shadow-field .foliage-layer--branch,
-.waitlist-shadow-field .foliage-layer--branch {
-  opacity: 0.36;
+/* Hero — visible on wall + subject (balanced multiply) */
+.hero-shadow-field .foliage-layer--a {
+  opacity: 0.34;
   transform: translate3d(var(--wx1), var(--wy1), 0) rotate(var(--wr1))
     scale(var(--wsx1), var(--wsy1));
-  filter: blur(0.6px);
+  filter: blur(0.45px);
 }
 
-.hero-shadow-field .foliage-layer--leaf,
-.waitlist-shadow-field .foliage-layer--leaf {
+.hero-shadow-field .foliage-layer--b {
   opacity: 0.22;
   transform: translate3d(var(--wx2), var(--wy2), 0) rotate(var(--wr2))
     scale(var(--wsx2), var(--wsy2));
-  filter: blur(0.25px);
+  filter: blur(0.2px);
 }
 
-/* Waitlist: same wind, offset phase via transform scale on layer 2 */
-.waitlist-shadow-field .foliage-layer--branch {
+.hero-shadow-field .foliage-layer--c {
+  opacity: 0.16;
+  transform: translate3d(var(--wx3), var(--wy3), 0) rotate(var(--wr3))
+    scale(var(--wsx3), var(--wsy3));
+  filter: blur(0.65px);
+}
+
+/* Waitlist — matched strength, no heavy crush */
+.waitlist-shadow-field .foliage-layer--a {
+  opacity: 0.3;
   transform: translate3d(
-      calc(var(--wx1) * 1.02 + 4px),
-      calc(var(--wy1) * 0.97),
+      calc(var(--wx1) * 1.03 + 3px),
+      calc(var(--wy1) * 0.98),
       0
     )
     rotate(var(--wr1)) scale(var(--wsx1), var(--wsy1));
+  filter: blur(0.45px);
 }
 
-.waitlist-shadow-field .foliage-layer--leaf {
+.waitlist-shadow-field .foliage-layer--b {
+  opacity: 0.2;
   transform: translate3d(
-      calc(var(--wx2) * 0.98 - 3px),
-      calc(var(--wy2) * 1.03),
+      calc(var(--wx2) * 0.99 - 2px),
+      calc(var(--wy2) * 1.02),
       0
     )
     rotate(var(--wr2)) scale(var(--wsx2), var(--wsy2));
+  filter: blur(0.2px);
+}
+
+.waitlist-shadow-field .foliage-layer--c {
+  opacity: 0.14;
+  transform: translate3d(
+      calc(var(--wx3) * 1.01 + 1px),
+      calc(var(--wy3) * 0.97),
+      0
+    )
+    rotate(var(--wr3)) scale(var(--wsx3), var(--wsy3));
+  filter: blur(0.55px);
 }
 
 @media (prefers-reduced-motion: reduce) {

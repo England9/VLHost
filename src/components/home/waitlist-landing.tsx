@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { Instagram } from "lucide-react";
@@ -25,25 +25,28 @@ function TikTokIcon({ className }: { className?: string }) {
 const linkClass =
   "relative z-10 inline-flex min-h-11 min-w-11 items-center justify-center text-[10px] tracking-[0.28em] text-white transition-opacity hover:opacity-70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white";
 
-/** Subtle fade — never blocks interaction */
-const softReveal = (
-  prefersReducedMotion: boolean | null,
-  delay: number,
-  duration = 0.7
-) =>
-  prefersReducedMotion
-    ? {}
-    : {
-        initial: { opacity: 0 },
-        animate: { opacity: 1 },
-        transition: { delay, duration, ease: EASING },
-      };
-
 export function WaitlistLanding() {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const prefersReducedMotion = useReducedMotion();
-  const windRootRef = useFoliageWind(!prefersReducedMotion);
+  const [windActive, setWindActive] = useState(Boolean(prefersReducedMotion));
+
+  useEffect(() => {
+    if (prefersReducedMotion) return;
+    const id = window.setTimeout(() => setWindActive(true), 1000);
+    return () => window.clearTimeout(id);
+  }, [prefersReducedMotion]);
+
+  const windRootRef = useFoliageWind(!prefersReducedMotion, windActive);
+
+  const reveal = (delay: number, duration = 0.85) =>
+    prefersReducedMotion
+      ? {}
+      : {
+          initial: { opacity: 0 },
+          animate: { opacity: 1 },
+          transition: { delay, duration, ease: EASING },
+        };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -74,9 +77,10 @@ export function WaitlistLanding() {
       <section className="relative flex min-h-[58vh] flex-1 flex-col border-b border-[#1a1a1a]/8 overflow-hidden md:min-h-[62vh]">
         <HeroLightingScene />
 
+        {/* 0.3s — wordmark */}
         <motion.header
           className="relative z-20 px-6 pt-6 md:px-10 md:pt-8 lg:px-14"
-          {...softReveal(prefersReducedMotion, 0.15, 0.65)}
+          {...reveal(0.3, 0.65)}
         >
           <Link
             href="/"
@@ -86,10 +90,11 @@ export function WaitlistLanding() {
           </Link>
         </motion.header>
 
+        {/* 1.6s — nav + social */}
         <motion.nav
           className="absolute right-4 top-4 z-30 flex items-center gap-2 md:right-10 md:top-8 lg:right-14"
           aria-label="Social links"
-          {...softReveal(prefersReducedMotion, 0.45, 0.6)}
+          {...reveal(1.6, 0.65)}
         >
           <a
             href={SITE_CONFIG.social.instagram}
@@ -111,9 +116,16 @@ export function WaitlistLanding() {
           </a>
         </motion.nav>
 
+        {/* 1.3s — headline */}
         <motion.div
           className="relative z-20 mt-auto px-6 pb-10 md:px-10 md:pb-14 lg:px-14"
-          {...softReveal(prefersReducedMotion, 0.28, 0.75)}
+          initial={prefersReducedMotion ? false : { opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            delay: prefersReducedMotion ? 0 : 1.3,
+            duration: 0.9,
+            ease: EASING,
+          }}
         >
           <div className="max-w-md">
             <h1 className="font-landing text-2xl font-normal leading-snug tracking-[0.06em] text-white md:text-3xl lg:text-[2rem]">
@@ -134,9 +146,16 @@ export function WaitlistLanding() {
       <section className="relative z-10 min-h-[38vh] overflow-hidden px-6 py-12 md:px-10 md:py-16 lg:px-14">
         <WaitlistLightingScene />
 
+        {/* 1.6s — waitlist */}
         <motion.div
           className="relative z-20 mx-auto flex max-w-xl flex-col items-center text-center"
-          {...softReveal(prefersReducedMotion, 0.4, 0.75)}
+          initial={prefersReducedMotion ? false : { opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            delay: prefersReducedMotion ? 0 : 1.6,
+            duration: 0.85,
+            ease: EASING,
+          }}
         >
           <div className="mb-8 flex flex-col items-center gap-4">
             <span className="h-px w-10 bg-[#1a1a1a]/80" aria-hidden />

@@ -18,6 +18,11 @@ const VAR_KEYS: (keyof FoliageWindVars)[] = [
   "wr2",
   "wsx2",
   "wsy2",
+  "wx3",
+  "wy3",
+  "wr3",
+  "wsx3",
+  "wsy3",
 ];
 
 function applyVars(el: HTMLElement, vars: FoliageWindVars) {
@@ -29,12 +34,12 @@ function applyVars(el: HTMLElement, vars: FoliageWindVars) {
 function mobileAmpScale(): number {
   if (typeof window === "undefined") return 1;
   const w = window.innerWidth;
-  if (w < 480) return 0.58;
-  if (w < 768) return 0.72;
+  if (w < 480) return 0.62;
+  if (w < 768) return 0.78;
   return 1;
 }
 
-export function useFoliageWind(enabled: boolean) {
+export function useFoliageWind(enabled: boolean, active: boolean) {
   const rootRef = useRef<HTMLDivElement>(null);
   const pausedRef = useRef(false);
   const ampRef = useRef(1);
@@ -61,8 +66,7 @@ export function useFoliageWind(enabled: boolean) {
     observer.observe(el);
 
     const onVisibility = () => {
-      if (document.hidden) pausedRef.current = true;
-      else pausedRef.current = false;
+      pausedRef.current = document.hidden;
     };
     document.addEventListener("visibilitychange", onVisibility);
 
@@ -87,7 +91,7 @@ export function useFoliageWind(enabled: boolean) {
 
     const tick = (now: number) => {
       frame = requestAnimationFrame(tick);
-      if (document.hidden || pausedRef.current) return;
+      if (!active || document.hidden || pausedRef.current) return;
       const interval = ampRef.current < 1 ? 32 : 16;
       if (now - lastUpdate < interval) return;
       lastUpdate = now;
@@ -99,7 +103,7 @@ export function useFoliageWind(enabled: boolean) {
     frame = requestAnimationFrame(tick);
 
     return () => cancelAnimationFrame(frame);
-  }, [enabled]);
+  }, [enabled, active]);
 
   return rootRef;
 }
