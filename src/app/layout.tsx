@@ -27,7 +27,20 @@ export default function RootLayout({
     <html lang="en" className={`${inter.variable} ${syne.variable}`}>
       <head>
         <meta name="theme-color" content="#ded8d1" />
+        <link
+          rel="icon"
+          href="/brand/micro-logo-black.svg"
+          type="image/svg+xml"
+          media="(prefers-color-scheme: light)"
+        />
+        <link
+          rel="icon"
+          href="/brand/micro-logo-white.svg"
+          type="image/svg+xml"
+          media="(prefers-color-scheme: dark)"
+        />
         <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="apple-touch-icon" href="/brand/favicon-32.png" />
         <link rel="manifest" href="/manifest.webmanifest" />
       </head>
       <body className="antialiased">

@@ -9,6 +9,10 @@ import { WaitlistLightingScene } from "@/components/lighting/waitlist-lighting-s
 import { useFoliageWind } from "@/hooks/use-foliage-wind";
 import { useLightingControls } from "@/hooks/use-lighting-controls";
 import { LightingControlPanel } from "@/components/lighting/lighting-control-panel";
+import {
+  ENTRANCE_TOTAL_S,
+  VulciraLogoEntrance,
+} from "@/components/brand/vulcira-logo-entrance";
 import { DEV_SHADOW_MENU_UNLOCK } from "@/lib/lighting-controls";
 import { SITE_CONFIG, EASING } from "@/lib/constants";
 
@@ -36,12 +40,26 @@ export function WaitlistLanding() {
   const prefersReducedMotion = useReducedMotion();
   const { controls, update, reset } = useLightingControls();
   const [windActive, setWindActive] = useState(Boolean(prefersReducedMotion));
+  const [entranceShift, setEntranceShift] = useState(0);
 
   useEffect(() => {
     if (prefersReducedMotion) return;
-    const id = window.setTimeout(() => setWindActive(true), 1000);
-    return () => window.clearTimeout(id);
+    try {
+      if (sessionStorage.getItem("vulcira-entrance-done") === "1") return;
+    } catch {
+      /* ignore */
+    }
+    setEntranceShift(ENTRANCE_TOTAL_S);
   }, [prefersReducedMotion]);
+
+  useEffect(() => {
+    if (prefersReducedMotion) return;
+    const id = window.setTimeout(
+      () => setWindActive(true),
+      1000 + entranceShift * 1000
+    );
+    return () => window.clearTimeout(id);
+  }, [prefersReducedMotion, entranceShift]);
 
   const windRootRef = useFoliageWind(
     !prefersReducedMotion && controls.motionEnabled,
@@ -55,7 +73,11 @@ export function WaitlistLanding() {
       : {
           initial: { opacity: 0 },
           animate: { opacity: 1 },
-          transition: { delay, duration, ease: EASING },
+          transition: {
+            delay: delay + entranceShift,
+            duration,
+            ease: EASING,
+          },
         };
 
   const showLightingPanel = email.trim() === DEV_PANEL_UNLOCK;
@@ -81,6 +103,8 @@ export function WaitlistLanding() {
   };
 
   return (
+  <>
+    <VulciraLogoEntrance onComplete={() => setEntranceShift(0)} />
     <div
       ref={windRootRef}
       data-foliage-wind
@@ -89,7 +113,7 @@ export function WaitlistLanding() {
       className="landing-root relative flex min-h-[100dvh] flex-col bg-[#ded8d1] text-[#1a1a1a]"
     >
       <section className="landing-section-lit relative flex min-h-[58vh] flex-1 flex-col border-b border-[#1a1a1a]/8 overflow-hidden md:min-h-[62vh]">
-        <HeroLightingScene />
+        <HeroLightingScene delayShift={entranceShift} />
 
         {/* 0.3s — wordmark */}
         <motion.header
@@ -136,7 +160,7 @@ export function WaitlistLanding() {
           initial={prefersReducedMotion ? false : { opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{
-            delay: prefersReducedMotion ? 0 : 1.3,
+            delay: prefersReducedMotion ? 0 : 1.3 + entranceShift,
             duration: 0.9,
             ease: EASING,
           }}
@@ -158,7 +182,7 @@ export function WaitlistLanding() {
       </section>
 
       <section className="landing-section-lit relative z-10 min-h-[38vh] overflow-hidden px-6 py-12 md:px-10 md:py-16 lg:px-14">
-        <WaitlistLightingScene />
+        <WaitlistLightingScene delayShift={entranceShift} />
 
         {/* 1.6s — waitlist */}
         <motion.div
@@ -166,7 +190,7 @@ export function WaitlistLanding() {
           initial={prefersReducedMotion ? false : { opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{
-            delay: prefersReducedMotion ? 0 : 1.6,
+            delay: prefersReducedMotion ? 0 : 1.6 + entranceShift,
             duration: 0.85,
             ease: EASING,
           }}
@@ -223,5 +247,6 @@ export function WaitlistLanding() {
         />
       )}
     </div>
+  </>
   );
 }

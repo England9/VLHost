@@ -5,7 +5,7 @@ import { LIGHTING_ASSETS } from "@/lib/foliage-wind";
 import { DualExposurePlate } from "@/components/lighting/dual-exposure-plate";
 import { EASING } from "@/lib/constants";
 
-export function HeroLightingScene() {
+export function HeroLightingScene({ delayShift = 0 }: { delayShift?: number }) {
   const prefersReducedMotion = useReducedMotion();
 
   return (
@@ -14,7 +14,7 @@ export function HeroLightingScene() {
       initial={prefersReducedMotion ? false : { opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{
-        delay: prefersReducedMotion ? 0 : 0.7,
+        delay: prefersReducedMotion ? 0 : 0.7 + delayShift,
         duration: 1.1,
         ease: EASING,
       }}
