@@ -2,6 +2,7 @@
 
 :root {
   --font-body: var(--font-inter);
+  --foliage-texture: url("/lighting/vulcira_layers/foliage-shadow.webp");
 
   --wx1: 0px;
   --wy1: 0px;
@@ -13,11 +14,6 @@
   --wr2: 0deg;
   --wsx2: 1;
   --wsy2: 1;
-  --wx3: 0px;
-  --wy3: 0px;
-  --wr3: 0deg;
-  --wsx3: 1;
-  --wsy3: 1;
 }
 
 @theme inline {
@@ -66,83 +62,134 @@ body {
   }
 }
 
-.hero-shadow-field,
-.waitlist-shadow-field {
+.hero-lighting-field,
+.waitlist-lighting-field {
   position: absolute;
   inset: -30%;
 }
 
-.foliage-layer {
+/* Shared motion — sun + shadow move as one unit */
+.foliage-motion {
   position: absolute;
   inset: 0;
-  background-size: 120%;
-  background-position: center;
-  background-repeat: no-repeat;
-  mix-blend-mode: multiply;
   transform-origin: 34% 42%;
   backface-visibility: hidden;
   will-change: transform;
   pointer-events: none;
 }
 
-/* Hero — visible on wall + subject (balanced multiply) */
-.hero-shadow-field .foliage-layer--a {
-  opacity: 0.34;
+.foliage-motion--a {
   transform: translate3d(var(--wx1), var(--wy1), 0) rotate(var(--wr1))
     scale(var(--wsx1), var(--wsy1));
-  filter: blur(0.45px);
 }
 
-.hero-shadow-field .foliage-layer--b {
-  opacity: 0.22;
+.foliage-motion--b {
   transform: translate3d(var(--wx2), var(--wy2), 0) rotate(var(--wr2))
     scale(var(--wsx2), var(--wsy2));
-  filter: blur(0.2px);
 }
 
-.hero-shadow-field .foliage-layer--c {
-  opacity: 0.16;
-  transform: translate3d(var(--wx3), var(--wy3), 0) rotate(var(--wr3))
-    scale(var(--wsx3), var(--wsy3));
-  filter: blur(0.65px);
+.foliage-sun,
+.foliage-shade {
+  position: absolute;
+  inset: 0;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 118%;
+  pointer-events: none;
 }
 
-/* Waitlist — matched strength, no heavy crush */
-.waitlist-shadow-field .foliage-layer--a {
-  opacity: 0.3;
+/**
+ * Sun: warm afternoon fill, masked inverse of foliage (gaps = lit patches).
+ * soft-light ≈ 20–35% exposure lift without white haze.
+ */
+.foliage-sun {
+  background-image: linear-gradient(
+    158deg,
+    #f3e4d0 0%,
+    #fff6ec 42%,
+    #ead9c4 100%
+  );
+  mix-blend-mode: soft-light;
+  opacity: 0.52;
+  -webkit-mask-image: linear-gradient(#fff, #fff), var(--foliage-texture);
+  mask-image: linear-gradient(#fff, #fff), var(--foliage-texture);
+  -webkit-mask-size: 100% 100%, 118%;
+  mask-size: 100% 100%, 118%;
+  -webkit-mask-position: center, center;
+  mask-position: center, center;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-composite: destination-out;
+  mask-composite: subtract;
+}
+
+.foliage-sun--b {
+  opacity: 0.34;
+  background-image: linear-gradient(
+    162deg,
+    #f0e0cc 0%,
+    #fff4e8 48%,
+    #e6d4be 100%
+  );
+}
+
+/* Shadow: same foliage texture, multiply — secondary to sunlight */
+.foliage-shade {
+  mix-blend-mode: multiply;
+  opacity: 0.14;
+  filter: blur(0.15px);
+}
+
+.foliage-shade--b {
+  opacity: 0.09;
+}
+
+/* Hero — slightly stronger sun on dark plate */
+.hero-lighting-field .foliage-sun {
+  opacity: 0.56;
+}
+
+.hero-lighting-field .foliage-sun--b {
+  opacity: 0.36;
+}
+
+.hero-lighting-field .foliage-shade {
+  opacity: 0.12;
+}
+
+.hero-lighting-field .foliage-shade--b {
+  opacity: 0.07;
+}
+
+/* Waitlist — matched rhythm, lighter base */
+.waitlist-lighting-field .foliage-motion--a {
   transform: translate3d(
-      calc(var(--wx1) * 1.03 + 3px),
+      calc(var(--wx1) * 1.02 + 3px),
       calc(var(--wy1) * 0.98),
       0
     )
     rotate(var(--wr1)) scale(var(--wsx1), var(--wsy1));
-  filter: blur(0.45px);
 }
 
-.waitlist-shadow-field .foliage-layer--b {
-  opacity: 0.2;
+.waitlist-lighting-field .foliage-motion--b {
   transform: translate3d(
       calc(var(--wx2) * 0.99 - 2px),
       calc(var(--wy2) * 1.02),
       0
     )
     rotate(var(--wr2)) scale(var(--wsx2), var(--wsy2));
-  filter: blur(0.2px);
 }
 
-.waitlist-shadow-field .foliage-layer--c {
-  opacity: 0.14;
-  transform: translate3d(
-      calc(var(--wx3) * 1.01 + 1px),
-      calc(var(--wy3) * 0.97),
-      0
-    )
-    rotate(var(--wr3)) scale(var(--wsx3), var(--wsy3));
-  filter: blur(0.55px);
+.waitlist-lighting-field .foliage-sun {
+  opacity: 0.46;
+}
+
+.waitlist-lighting-field .foliage-sun--b {
+  opacity: 0.3;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .foliage-layer {
+  .foliage-motion {
     will-change: auto;
   }
 }

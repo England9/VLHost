@@ -2,7 +2,7 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 import { LIGHTING_ASSETS } from "@/lib/foliage-wind";
-import { FoliageShadowLayers } from "@/components/lighting/foliage-shadow-layers";
+import { FoliageLightingLayers } from "@/components/lighting/foliage-shadow-layers";
 import { EASING } from "@/lib/constants";
 
 export function HeroLightingScene() {
@@ -30,9 +30,8 @@ export function HeroLightingScene() {
         />
       </motion.div>
 
-      {/* Full-frame shadows — no mask; multiply over subject + wall */}
       <motion.div
-        className="hero-shadow-field"
+        className="hero-lighting-field"
         aria-hidden
         initial={prefersReducedMotion ? false : { opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -42,7 +41,7 @@ export function HeroLightingScene() {
           ease: EASING,
         }}
       >
-        <FoliageShadowLayers />
+        <FoliageLightingLayers />
       </motion.div>
     </div>
   );

@@ -1,6 +1,6 @@
 /**
- * Three-layer foliage wind — multiply compositing, fixed opacity in CSS.
- * Smooth envelope (no flash), ~35–55px drift, ~10–12s motion character.
+ * Two synchronized foliage motion groups — each drives a sun + shadow pair
+ * (same transform). Smooth envelope, ~35–55px drift.
  */
 
 export type FoliageWindVars = {
@@ -14,11 +14,6 @@ export type FoliageWindVars = {
   wr2: string;
   wsx2: string;
   wsy2: string;
-  wx3: string;
-  wy3: string;
-  wr3: string;
-  wsx3: string;
-  wsy3: string;
 };
 
 type LayerProfile = {
@@ -32,34 +27,26 @@ type LayerProfile = {
 
 const LAYERS: LayerProfile[] = [
   {
-    speed: 0.78,
+    speed: 0.76,
     phase: 0,
-    ampX: 0.85,
-    ampY: 0.8,
-    ampR: 0.78,
-    deform: 0.024,
+    ampX: 0.88,
+    ampY: 0.82,
+    ampR: 0.8,
+    deform: 0.022,
   },
   {
-    speed: 1.08,
-    phase: 2.05,
+    speed: 1.06,
+    phase: 2.12,
     ampX: 1,
     ampY: 0.94,
     ampR: 1,
-    deform: 0.03,
-  },
-  {
-    speed: 0.92,
-    phase: 4.35,
-    ampX: 0.9,
-    ampY: 0.86,
-    ampR: 0.88,
     deform: 0.026,
   },
 ];
 
-const DESKTOP_X = 52;
-const DESKTOP_Y = 36;
-const DESKTOP_R = 2.4;
+const DESKTOP_X = 54;
+const DESKTOP_Y = 38;
+const DESKTOP_R = 2.5;
 
 function px(n: number) {
   return `${n.toFixed(2)}px`;
@@ -73,13 +60,12 @@ function num(n: number) {
   return n.toFixed(4);
 }
 
-/** Smooth envelope — no sharp gust spikes that read as flashing */
 function windEnvelope(t: number): number {
   return (
-    0.94 +
-    Math.sin(t * 0.44) * 0.045 +
-    Math.sin(t * 0.21 + 1.1) * 0.028 +
-    Math.sin(t * 0.63 + 2.3) * 0.018
+    0.95 +
+    Math.sin(t * 0.43) * 0.04 +
+    Math.sin(t * 0.2 + 1.05) * 0.025 +
+    Math.sin(t * 0.61 + 2.2) * 0.016
   );
 }
 
@@ -94,41 +80,41 @@ function layerMotion(
   const g = envelope;
 
   const x =
-    (Math.sin(tm * 0.58 + ph) * 28 +
-      Math.sin(tm * 0.94 + ph * 1.05) * 16 +
-      Math.sin(tm * 1.41 + ph * 0.55) * 8) *
+    (Math.sin(tm * 0.57 + ph) * 29 +
+      Math.sin(tm * 0.93 + ph * 1.05) * 16 +
+      Math.sin(tm * 1.39 + ph * 0.52) * 8) *
     profile.ampX *
     g *
     ampScale;
 
   const y =
-    (Math.cos(tm * 0.52 + ph * 0.85) * 20 +
-      Math.sin(tm * 0.88 + ph) * 11 +
-      Math.sin(tm * 1.26 + ph * 1.25) * 6) *
+    (Math.cos(tm * 0.51 + ph * 0.86) * 21 +
+      Math.sin(tm * 0.87 + ph) * 11 +
+      Math.sin(tm * 1.24 + ph * 1.22) * 6) *
     profile.ampY *
     g *
     ampScale;
 
   const r =
-    (Math.sin(tm * 0.65 + ph) * 1.25 +
-      Math.sin(tm * 1.18 + ph * 0.55) * 0.72) *
+    (Math.sin(tm * 0.64 + ph) * 1.28 +
+      Math.sin(tm * 1.16 + ph * 0.52) * 0.74) *
     profile.ampR *
     g;
 
   const d = profile.deform * g;
   const sx =
     1 +
-    Math.sin(tm * 0.76 + ph) * d +
-    Math.sin(tm * 1.32 + ph) * d * 0.48;
+    Math.sin(tm * 0.75 + ph) * d +
+    Math.sin(tm * 1.3 + ph) * d * 0.46;
   const sy =
     1 +
-    Math.cos(tm * 0.83 + ph) * d * 0.92 +
-    Math.sin(tm * 1.2 + ph * 0.65) * d * 0.42;
+    Math.cos(tm * 0.82 + ph) * d * 0.9 +
+    Math.sin(tm * 1.19 + ph * 0.62) * d * 0.4;
 
   return {
-    x: (x / 52) * DESKTOP_X,
-    y: (y / 37) * DESKTOP_Y,
-    r: (r / 1.95) * DESKTOP_R,
+    x: (x / 53) * DESKTOP_X,
+    y: (y / 38) * DESKTOP_Y,
+    r: (r / 2) * DESKTOP_R,
     sx,
     sy,
   };
@@ -136,16 +122,11 @@ function layerMotion(
 
 function toVars(
   m: ReturnType<typeof layerMotion>,
-  n: 1 | 2 | 3
-): Partial<FoliageWindVars> {
-  const p = String(n) as "1" | "2" | "3";
-  return {
-    [`wx${p}`]: px(m.x),
-    [`wy${p}`]: px(m.y),
-    [`wr${p}`]: deg(m.r),
-    [`wsx${p}`]: num(m.sx),
-    [`wsy${p}`]: num(m.sy),
-  } as Partial<FoliageWindVars>;
+  n: 1 | 2
+): FoliageWindVars {
+  const keys = n === 1 ? ["wx1", "wy1", "wr1", "wsx1", "wsy1"] : ["wx2", "wy2", "wr2", "wsx2", "wsy2"];
+  const vals = [px(m.x), px(m.y), deg(m.r), num(m.sx), num(m.sy)];
+  return Object.fromEntries(keys.map((k, i) => [k, vals[i]])) as FoliageWindVars;
 }
 
 export function computeFoliageWind(
@@ -154,25 +135,14 @@ export function computeFoliageWind(
 ): FoliageWindVars {
   const envelope = windEnvelope(t);
   const m1 = layerMotion(t, LAYERS[0], envelope, ampScale);
-  const m2 = layerMotion(t, LAYERS[1], envelope, ampScale * 1.03);
-  const m3 = layerMotion(t, LAYERS[2], envelope, ampScale * 0.97);
-
-  return {
-    ...toVars(m1, 1),
-    ...toVars(m2, 2),
-    ...toVars(m3, 3),
-  } as FoliageWindVars;
+  const m2 = layerMotion(t, LAYERS[1], envelope, ampScale * 1.02);
+  return { ...toVars(m1, 1), ...toVars(m2, 2) };
 }
 
 export function reducedMotionFoliageWind(): FoliageWindVars {
-  const m1 = layerMotion(3.2, LAYERS[0], 0.96, 0.45);
-  const m2 = layerMotion(4.4, LAYERS[1], 0.94, 0.48);
-  const m3 = layerMotion(5.1, LAYERS[2], 0.95, 0.46);
-  return {
-    ...toVars(m1, 1),
-    ...toVars(m2, 2),
-    ...toVars(m3, 3),
-  } as FoliageWindVars;
+  const m1 = layerMotion(3.2, LAYERS[0], 0.96, 0.48);
+  const m2 = layerMotion(4.5, LAYERS[1], 0.94, 0.5);
+  return { ...toVars(m1, 1), ...toVars(m2, 2) };
 }
 
 export const LIGHTING_ASSETS = {

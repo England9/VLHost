@@ -18,11 +18,6 @@ const VAR_KEYS: (keyof FoliageWindVars)[] = [
   "wr2",
   "wsx2",
   "wsy2",
-  "wx3",
-  "wy3",
-  "wr3",
-  "wsx3",
-  "wsy3",
 ];
 
 function applyVars(el: HTMLElement, vars: FoliageWindVars) {

@@ -2,7 +2,7 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 import { LIGHTING_ASSETS } from "@/lib/foliage-wind";
-import { FoliageShadowLayers } from "@/components/lighting/foliage-shadow-layers";
+import { FoliageLightingLayers } from "@/components/lighting/foliage-shadow-layers";
 import { EASING } from "@/lib/constants";
 
 export function WaitlistLightingScene() {
@@ -20,7 +20,7 @@ export function WaitlistLightingScene() {
         />
       </motion.div>
       <motion.div
-        className="waitlist-shadow-field"
+        className="waitlist-lighting-field"
         aria-hidden
         initial={prefersReducedMotion ? false : { opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -30,7 +30,7 @@ export function WaitlistLightingScene() {
           ease: EASING,
         }}
       >
-        <FoliageShadowLayers />
+        <FoliageLightingLayers />
       </motion.div>
     </div>
   );
