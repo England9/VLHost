@@ -5,8 +5,7 @@ import { FoliageShadowLayers } from "@/components/lighting/foliage-shadow-layers
 
 export function HeroLightingScene() {
   return (
-    <div className="hero-plate pointer-events-none absolute inset-0">
-      {/* Stationary photograph */}
+    <div className="hero-plate pointer-events-none absolute inset-0 overflow-hidden">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={LIGHTING_ASSETS.hero}
@@ -16,12 +15,9 @@ export function HeroLightingScene() {
         decoding="async"
       />
 
-      {/* Fixed mask — does not move; only foliage inside moves */}
-      <div
-        className="hero-shadow-mask absolute inset-0 overflow-hidden"
-        aria-hidden
-      >
-        <FoliageShadowLayers variant="hero" />
+      {/* Fixed mask (overscanned) — foliage moves inside; mask stays aligned to photo */}
+      <div className="hero-shadow-field absolute" aria-hidden>
+        <FoliageShadowLayers />
       </div>
     </div>
   );

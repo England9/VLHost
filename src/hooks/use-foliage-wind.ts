@@ -13,29 +13,11 @@ const VAR_KEYS: (keyof FoliageWindVars)[] = [
   "wr1",
   "wsx1",
   "wsy1",
-  "op1",
-  "blur1",
   "wx2",
   "wy2",
   "wr2",
   "wsx2",
   "wsy2",
-  "op2",
-  "blur2",
-  "wx3",
-  "wy3",
-  "wr3",
-  "wsx3",
-  "wsy3",
-  "op3",
-  "blur3",
-  "wx4",
-  "wy4",
-  "wr4",
-  "wsx4",
-  "wsy4",
-  "op4",
-  "blur4",
 ];
 
 function applyVars(el: HTMLElement, vars: FoliageWindVars) {
@@ -47,8 +29,8 @@ function applyVars(el: HTMLElement, vars: FoliageWindVars) {
 function mobileAmpScale(): number {
   if (typeof window === "undefined") return 1;
   const w = window.innerWidth;
-  if (w < 480) return 0.55;
-  if (w < 768) return 0.68;
+  if (w < 480) return 0.58;
+  if (w < 768) return 0.72;
   return 1;
 }
 

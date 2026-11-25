@@ -1,6 +1,6 @@
 /**
- * Layered foliage wind — incommensurate frequencies, gust envelope,
- * per-layer speed/phase. Desktop displacement targets ~40–70px; ~8–14s motion.
+ * Two-layer foliage wind — multiply shadows only; fixed opacity, minimal blur.
+ * Desktop displacement ~30–60px, rotation ~1–3°, ~7–14s character.
  */
 
 export type FoliageWindVars = {
@@ -9,94 +9,43 @@ export type FoliageWindVars = {
   wr1: string;
   wsx1: string;
   wsy1: string;
-  op1: string;
-  blur1: string;
   wx2: string;
   wy2: string;
   wr2: string;
   wsx2: string;
   wsy2: string;
-  op2: string;
-  blur2: string;
-  wx3: string;
-  wy3: string;
-  wr3: string;
-  wsx3: string;
-  wsy3: string;
-  op3: string;
-  blur3: string;
-  wx4: string;
-  wy4: string;
-  wr4: string;
-  wsx4: string;
-  wsy4: string;
-  op4: string;
-  blur4: string;
 };
 
 type LayerProfile = {
-  id: number;
-  /** Local time multiplier — higher = faster leaf layer */
   speed: number;
   phase: number;
   ampX: number;
   ampY: number;
   ampR: number;
-  baseOp: number;
-  baseBlur: number;
   deform: number;
 };
 
-const LAYER_PROFILES: LayerProfile[] = [
-  {
-    id: 1,
-    speed: 0.88,
-    phase: 0,
-    ampX: 0.78,
-    ampY: 0.72,
-    ampR: 0.85,
-    baseOp: 0.46,
-    baseBlur: 0.45,
-    deform: 0.032,
-  },
-  {
-    id: 2,
-    speed: 1.28,
-    phase: 1.7,
-    ampX: 1,
-    ampY: 0.95,
-    ampR: 1.1,
-    baseOp: 0.34,
-    baseBlur: 0.18,
-    deform: 0.045,
-  },
-  {
-    id: 3,
-    speed: 1.05,
-    phase: 3.4,
-    ampX: 0.86,
-    ampY: 0.8,
-    ampR: 0.95,
-    baseOp: 0.26,
-    baseBlur: 0.95,
-    deform: 0.028,
-  },
-  {
-    id: 4,
-    speed: 1.52,
-    phase: 5.1,
-    ampX: 0.92,
-    ampY: 0.88,
-    ampR: 1.05,
-    baseOp: 0.22,
-    baseBlur: 0.28,
-    deform: 0.05,
-  },
-];
+const BRANCH: LayerProfile = {
+  speed: 0.72,
+  phase: 0,
+  ampX: 0.82,
+  ampY: 0.78,
+  ampR: 0.75,
+  deform: 0.022,
+};
 
-const DESKTOP_X = 58;
-const DESKTOP_Y = 38;
-const DESKTOP_R = 3.2;
+const LEAF: LayerProfile = {
+  speed: 1.05,
+  phase: 2.15,
+  ampX: 1,
+  ampY: 0.92,
+  ampR: 1,
+  deform: 0.028,
+};
+
+const DESKTOP_X = 48;
+const DESKTOP_Y = 32;
+const DESKTOP_R = 2.1;
 
 function px(n: number) {
   return `${n.toFixed(2)}px`;
@@ -106,20 +55,15 @@ function deg(n: number) {
   return `${n.toFixed(3)}deg`;
 }
 
-function num(n: number, d = 3) {
-  return n.toFixed(d);
+function num(n: number) {
+  return n.toFixed(4);
 }
 
-/** Gusts with calm valleys — stronger bursts, then ease back */
+/** Gentle gusts — subtle, not smoke-like surges */
 function windEnvelope(t: number): number {
-  const breathe = 0.86 + Math.sin(t * 0.52) * 0.07;
-  const ripple = Math.sin(t * 0.91 + 0.8) * Math.sin(t * 0.37 + 1.2);
-  const gustPulse = Math.pow(
-    Math.max(0, Math.sin(t * 0.68 + Math.sin(t * 0.19) * 1.4)),
-    2.4
-  );
-  const gust = 1 + gustPulse * 0.42 + Math.max(0, ripple) * 0.14;
-  return breathe * gust;
+  const slow = 0.92 + Math.sin(t * 0.48) * 0.05;
+  const gust = 1 + Math.pow(Math.max(0, Math.sin(t * 0.55 + Math.sin(t * 0.17))), 2) * 0.18;
+  return slow * gust;
 }
 
 function layerMotion(
@@ -133,75 +77,38 @@ function layerMotion(
   const g = envelope;
 
   const x =
-    (Math.sin(tm * 0.64 + ph) * 32 +
-      Math.sin(tm * 1.08 + ph * 1.2) * 20 +
-      Math.sin(tm * 1.74 + ph * 0.6) * 11 +
-      Math.sin(tm * 2.35 + ph) * 6) *
+    (Math.sin(tm * 0.55 + ph) * 26 +
+      Math.sin(tm * 0.92 + ph * 1.1) * 14 +
+      Math.sin(tm * 1.38 + ph * 0.5) * 7) *
     profile.ampX *
     g *
     ampScale;
 
   const y =
-    (Math.cos(tm * 0.58 + ph * 0.9) * 22 +
-      Math.sin(tm * 1.02 + ph) * 14 +
-      Math.sin(tm * 1.65 + ph * 1.4) * 8) *
+    (Math.cos(tm * 0.51 + ph * 0.8) * 18 +
+      Math.sin(tm * 0.86 + ph) * 10 +
+      Math.sin(tm * 1.22 + ph * 1.3) * 5) *
     profile.ampY *
     g *
     ampScale;
 
   const r =
-    (Math.sin(tm * 0.71 + ph) * 1.65 +
-      Math.sin(tm * 1.38 + ph * 0.5) * 1.05 +
-      Math.sin(tm * 2.1 + ph) * 0.55) *
+    (Math.sin(tm * 0.62 + ph) * 1.1 +
+      Math.sin(tm * 1.15 + ph * 0.6) * 0.65) *
     profile.ampR *
     g;
 
   const d = profile.deform * g;
-  const sx =
-    1 +
-    Math.sin(tm * 0.82 + ph) * d +
-    Math.sin(tm * 1.55 + ph * 0.7) * d * 0.65;
-  const sy =
-    1 +
-    Math.cos(tm * 0.94 + ph * 1.1) * d * 1.05 +
-    Math.sin(tm * 1.42 + ph) * d * 0.55;
-
-  const opMod =
-    0.88 +
-    Math.sin(tm * 0.77 + ph) * 0.08 +
-    Math.sin(tm * 1.33 + ph) * 0.05 * g;
-  const op = profile.baseOp * opMod;
-
-  const blur =
-    profile.baseBlur +
-    Math.sin(tm * 0.68 + ph) * 0.35 +
-    Math.sin(tm * 1.44 + ph) * 0.22;
+  const sx = 1 + Math.sin(tm * 0.74 + ph) * d + Math.sin(tm * 1.28 + ph) * d * 0.45;
+  const sy = 1 + Math.cos(tm * 0.81 + ph) * d * 0.9 + Math.sin(tm * 1.18 + ph * 0.7) * d * 0.4;
 
   return {
-    x: (x / 55) * DESKTOP_X,
-    y: (y / 36) * DESKTOP_Y,
-    r: (r / 2.2) * DESKTOP_R,
+    x: (x / 47) * DESKTOP_X,
+    y: (y / 33) * DESKTOP_Y,
+    r: (r / 1.75) * DESKTOP_R,
     sx,
     sy,
-    op: Math.min(0.58, Math.max(0.14, op)),
-    blur: Math.min(1.8, Math.max(0.08, blur)),
   };
-}
-
-function varsForLayer(
-  prefix: 1 | 2 | 3 | 4,
-  m: ReturnType<typeof layerMotion>
-): Partial<FoliageWindVars> {
-  const p = String(prefix) as "1" | "2" | "3" | "4";
-  return {
-    [`wx${p}`]: px(m.x),
-    [`wy${p}`]: px(m.y),
-    [`wr${p}`]: deg(m.r),
-    [`wsx${p}`]: num(m.sx),
-    [`wsy${p}`]: num(m.sy),
-    [`op${p}`]: num(m.op, 2),
-    [`blur${p}`]: px(m.blur),
-  } as Partial<FoliageWindVars>;
 }
 
 export function computeFoliageWind(
@@ -209,40 +116,44 @@ export function computeFoliageWind(
   ampScale = 1
 ): FoliageWindVars {
   const envelope = windEnvelope(t);
-  const m1 = layerMotion(t, LAYER_PROFILES[0], envelope, ampScale);
-  const m2 = layerMotion(t, LAYER_PROFILES[1], envelope, ampScale);
-  const m3 = layerMotion(t, LAYER_PROFILES[2], envelope, ampScale);
-  const m4 = layerMotion(t, LAYER_PROFILES[3], envelope, ampScale);
+  const m1 = layerMotion(t, BRANCH, envelope, ampScale);
+  const m2 = layerMotion(t, LEAF, envelope, ampScale * 1.02);
 
   return {
-    ...varsForLayer(1, m1),
-    ...varsForLayer(2, m2),
-    ...varsForLayer(3, m3),
-    ...varsForLayer(4, m4),
-  } as FoliageWindVars;
+    wx1: px(m1.x),
+    wy1: px(m1.y),
+    wr1: deg(m1.r),
+    wsx1: num(m1.sx),
+    wsy1: num(m1.sy),
+    wx2: px(m2.x),
+    wy2: px(m2.y),
+    wr2: deg(m2.r),
+    wsx2: num(m2.sx),
+    wsy2: num(m2.sy),
+  };
 }
 
-export function staticFoliageWind(): FoliageWindVars {
-  return computeFoliageWind(0, 0);
-}
-
-/** Mid-strength static frame for reduced motion */
 export function reducedMotionFoliageWind(): FoliageWindVars {
-  const m = layerMotion(4.2, LAYER_PROFILES[0], 0.95, 0.35);
-  const m2 = layerMotion(5.1, LAYER_PROFILES[1], 0.92, 0.38);
-  const m3 = layerMotion(3.8, LAYER_PROFILES[2], 0.9, 0.32);
-  const m4 = layerMotion(6.0, LAYER_PROFILES[3], 0.93, 0.36);
+  const m1 = layerMotion(3.4, BRANCH, 0.94, 0.4);
+  const m2 = layerMotion(4.6, LEAF, 0.92, 0.42);
   return {
-    ...varsForLayer(1, m),
-    ...varsForLayer(2, m2),
-    ...varsForLayer(3, m3),
-    ...varsForLayer(4, m4),
-  } as FoliageWindVars;
+    wx1: px(m1.x),
+    wy1: px(m1.y),
+    wr1: deg(m1.r),
+    wsx1: num(m1.sx),
+    wsy1: num(m1.sy),
+    wx2: px(m2.x),
+    wy2: px(m2.y),
+    wr2: deg(m2.r),
+    wsx2: num(m2.sx),
+    wsy2: num(m2.sy),
+  };
 }
 
 export const LIGHTING_ASSETS = {
   hero: "/lighting/vulcira_layers/hero-clean.webp",
   waitlist: "/lighting/vulcira_layers/waitlist-clean.webp",
   foliage: "/lighting/vulcira_layers/foliage-shadow.webp",
-  heroMask: "/lighting/vulcira_layers/hero-shadow-mask.png",
+  /** Feathered mask — allows soft shadows on jacket, hair, and face */
+  heroMask: "/lighting/vulcira_layers/hero-shadow-mask-soft.png",
 } as const;

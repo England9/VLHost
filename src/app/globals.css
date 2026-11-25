@@ -2,37 +2,18 @@
 
 :root {
   --font-body: var(--font-inter);
-  --ease-luxury: cubic-bezier(0.16, 1, 0.3, 1);
-  --vulcira-mask: url("/lighting/vulcira_layers/hero-shadow-mask.png");
+  --vulcira-mask: url("/lighting/vulcira_layers/hero-shadow-mask-soft.png");
 
   --wx1: 0px;
   --wy1: 0px;
   --wr1: 0deg;
   --wsx1: 1;
   --wsy1: 1;
-  --op1: 0.46;
-  --blur1: 0.45px;
   --wx2: 0px;
   --wy2: 0px;
   --wr2: 0deg;
   --wsx2: 1;
   --wsy2: 1;
-  --op2: 0.34;
-  --blur2: 0.18px;
-  --wx3: 0px;
-  --wy3: 0px;
-  --wr3: 0deg;
-  --wsx3: 1;
-  --wsy3: 1;
-  --op3: 0.26;
-  --blur3: 0.95px;
-  --wx4: 0px;
-  --wy4: 0px;
-  --wr4: 0deg;
-  --wsx4: 1;
-  --wsy4: 1;
-  --op4: 0.22;
-  --blur4: 0.28px;
 }
 
 @theme inline {
@@ -66,6 +47,7 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* Hero plate — photo + masked shadows, 28% overscan on shadow field */
 .hero-photo {
   object-position: 68% center;
 }
@@ -76,7 +58,13 @@ body {
   }
 }
 
-.hero-shadow-mask {
+.hero-shadow-field,
+.waitlist-shadow-field {
+  position: absolute;
+  inset: -28%;
+}
+
+.hero-shadow-field {
   -webkit-mask-image: var(--vulcira-mask);
   mask-image: var(--vulcira-mask);
   mask-size: cover;
@@ -88,7 +76,7 @@ body {
 }
 
 @media (min-width: 768px) {
-  .hero-shadow-mask {
+  .hero-shadow-field {
     mask-position: 72% 20%;
     -webkit-mask-position: 72% 20%;
   }
@@ -96,82 +84,50 @@ body {
 
 .foliage-layer {
   position: absolute;
-  inset: -14%;
-  background-size: cover;
+  inset: 0;
+  background-size: 118%;
   background-position: center;
   background-repeat: no-repeat;
   mix-blend-mode: multiply;
-  transform-origin: 36% 40%;
-  will-change: transform, opacity, filter;
+  transform-origin: 34% 42%;
+  will-change: transform;
   pointer-events: none;
 }
 
-.hero-shadow-mask .foliage-layer--branch {
-  opacity: var(--op1);
+/* Fixed opacity — movement via transform only (no haze / smoke) */
+.hero-shadow-field .foliage-layer--branch,
+.waitlist-shadow-field .foliage-layer--branch {
+  opacity: 0.36;
   transform: translate3d(var(--wx1), var(--wy1), 0) rotate(var(--wr1))
     scale(var(--wsx1), var(--wsy1));
-  filter: blur(var(--blur1));
+  filter: blur(0.6px);
 }
 
-.hero-shadow-mask .foliage-layer--leaf {
-  opacity: var(--op2);
+.hero-shadow-field .foliage-layer--leaf,
+.waitlist-shadow-field .foliage-layer--leaf {
+  opacity: 0.22;
   transform: translate3d(var(--wx2), var(--wy2), 0) rotate(var(--wr2))
     scale(var(--wsx2), var(--wsy2));
-  filter: blur(var(--blur2));
+  filter: blur(0.25px);
 }
 
-.hero-shadow-mask .foliage-layer--branch-alt {
-  opacity: var(--op3);
-  transform: translate3d(var(--wx3), var(--wy3), 0) rotate(var(--wr3))
-    scale(var(--wsx3), var(--wsy3));
-  filter: blur(var(--blur3));
-}
-
-.hero-shadow-mask .foliage-layer--leaf-alt {
-  opacity: var(--op4);
-  transform: translate3d(var(--wx4), var(--wy4), 0) rotate(var(--wr4))
-    scale(var(--wsx4), var(--wsy4));
-  filter: blur(var(--blur4));
-}
-
+/* Waitlist: same wind, offset phase via transform scale on layer 2 */
 .waitlist-shadow-field .foliage-layer--branch {
-  opacity: calc(var(--op3) * 1.05);
   transform: translate3d(
-      calc(var(--wx3) * 1.04 + 3px),
-      calc(var(--wy3) * 0.98),
-      0
-    )
-    rotate(var(--wr3)) scale(var(--wsx3), var(--wsy3));
-  filter: blur(var(--blur3));
-}
-
-.waitlist-shadow-field .foliage-layer--leaf {
-  opacity: calc(var(--op4) * 1.02);
-  transform: translate3d(
-      calc(var(--wx4) * 1.06 - 2px),
-      calc(var(--wy4) * 1.04),
-      0
-    )
-    rotate(var(--wr4)) scale(var(--wsx4), var(--wsy4));
-  filter: blur(var(--blur4));
-}
-
-.waitlist-shadow-field .foliage-layer--branch-alt {
-  opacity: calc(var(--op1) * 0.95);
-  transform: translate3d(
-      calc(var(--wx1) * 0.94 + 5px),
-      calc(var(--wy1) * 0.9),
+      calc(var(--wx1) * 1.02 + 4px),
+      calc(var(--wy1) * 0.97),
       0
     )
     rotate(var(--wr1)) scale(var(--wsx1), var(--wsy1));
-  filter: blur(var(--blur1));
 }
 
-.waitlist-shadow-field .foliage-layer--leaf-alt {
-  opacity: calc(var(--op2) * 0.92);
-  transform: translate3d(calc(var(--wx2) * 0.96), calc(var(--wy2) * 1.08), 0)
+.waitlist-shadow-field .foliage-layer--leaf {
+  transform: translate3d(
+      calc(var(--wx2) * 0.98 - 3px),
+      calc(var(--wy2) * 1.03),
+      0
+    )
     rotate(var(--wr2)) scale(var(--wsx2), var(--wsy2));
-  filter: blur(var(--blur2));
 }
 
 @media (prefers-reduced-motion: reduce) {

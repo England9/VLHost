@@ -71,12 +71,8 @@ export function WaitlistLanding() {
       data-foliage-wind
       className="landing-root relative flex min-h-[100dvh] flex-col bg-[#ded8d1] text-[#1a1a1a]"
     >
-      <section className="relative flex min-h-[58vh] flex-1 flex-col overflow-hidden md:min-h-[62vh]">
+      <section className="relative flex min-h-[58vh] flex-1 flex-col border-b border-[#1a1a1a]/8 overflow-hidden md:min-h-[62vh]">
         <HeroLightingScene />
-        <div
-          className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-b from-transparent via-transparent to-[#ded8d1]/55"
-          aria-hidden
-        />
 
         <motion.header
           className="relative z-20 px-6 pt-6 md:px-10 md:pt-8 lg:px-14"
@@ -137,10 +133,6 @@ export function WaitlistLanding() {
 
       <section className="relative z-10 min-h-[38vh] overflow-hidden px-6 py-12 md:px-10 md:py-16 lg:px-14">
         <WaitlistLightingScene />
-        <div
-          className="pointer-events-none absolute inset-0 z-[1] bg-[#ded8d1]/25"
-          aria-hidden
-        />
 
         <motion.div
           className="relative z-20 mx-auto flex max-w-xl flex-col items-center text-center"
@@ -177,7 +169,7 @@ export function WaitlistLanding() {
                 placeholder="ENTER YOUR EMAIL"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="h-12 min-h-12 flex-1 border border-[#1a1a1a] bg-[#e8e4df]/95 px-4 text-center text-[10px] tracking-[0.22em] text-[#1a1a1a] placeholder:text-[#1a1a1a]/45 outline-none backdrop-blur-[1px] transition-colors focus:bg-[#f0ece8] sm:text-left"
+                className="h-12 min-h-12 flex-1 border border-[#1a1a1a] bg-[#e8e4df] px-4 text-center text-[10px] tracking-[0.22em] text-[#1a1a1a] placeholder:text-[#1a1a1a]/45 outline-none transition-colors focus:bg-[#f0ece8] sm:text-left"
               />
               <button
                 type="submit"
