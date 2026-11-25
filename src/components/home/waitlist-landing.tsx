@@ -4,12 +4,10 @@ import { useState } from "react";
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { Instagram } from "lucide-react";
-import { TreeShadowOverlay } from "@/components/home/tree-shadow-overlay";
-import { SITE_CONFIG } from "@/lib/constants";
-import { EASING } from "@/lib/constants";
-
-/** Clean editorial photo — no baked-in typography */
-const HERO_IMAGE = "/images/vulcira-hero-editorial.jpg";
+import { HeroLightingScene } from "@/components/lighting/hero-lighting-scene";
+import { WaitlistLightingScene } from "@/components/lighting/waitlist-lighting-scene";
+import { useFoliageWind } from "@/hooks/use-foliage-wind";
+import { SITE_CONFIG, EASING } from "@/lib/constants";
 
 function TikTokIcon({ className }: { className?: string }) {
   return (
@@ -27,19 +25,25 @@ function TikTokIcon({ className }: { className?: string }) {
 const linkClass =
   "relative z-10 inline-flex min-h-11 min-w-11 items-center justify-center text-[10px] tracking-[0.28em] text-white transition-opacity hover:opacity-70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white";
 
+/** Subtle fade — never blocks interaction */
+const softReveal = (
+  prefersReducedMotion: boolean | null,
+  delay: number,
+  duration = 0.7
+) =>
+  prefersReducedMotion
+    ? {}
+    : {
+        initial: { opacity: 0 },
+        animate: { opacity: 1 },
+        transition: { delay, duration, ease: EASING },
+      };
+
 export function WaitlistLanding() {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const prefersReducedMotion = useReducedMotion();
-
-  const reveal = (delay: number, duration = 0.85) =>
-    prefersReducedMotion
-      ? {}
-      : {
-          initial: { opacity: 0 },
-          animate: { opacity: 1 },
-          transition: { delay, duration, ease: EASING },
-        };
+  const windRootRef = useFoliageWind(!prefersReducedMotion);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -56,46 +60,27 @@ export function WaitlistLanding() {
         );
       }
     } catch {
-      /* ignore storage errors */
+      /* ignore */
     }
     setSubmitted(true);
   };
 
   return (
-    <div className="landing-root relative flex min-h-[100dvh] flex-col bg-[#ded8d1] text-[#1a1a1a]">
-      <section className="relative flex min-h-[58vh] flex-1 flex-col md:min-h-[62vh]">
-        {/* Decorative stack — never intercepts clicks */}
-        <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
-          <motion.div
-            className="absolute inset-0"
-            {...reveal(0.7, 1.1)}
-          >
-            <motion.div
-              className="absolute inset-0"
-              initial={prefersReducedMotion ? false : { scale: 1.05 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 0.7, duration: 1.4, ease: EASING }}
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={HERO_IMAGE}
-                alt=""
-                className="h-full w-full object-cover object-[68%_center] md:object-[72%_20%]"
-                fetchPriority="high"
-                decoding="async"
-              />
-            </motion.div>
-            <div className="absolute inset-0 bg-gradient-to-r from-black/25 via-black/5 to-black/20" />
-            <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-[#ded8d1]/40" />
-          </motion.div>
+    <div
+      ref={windRootRef}
+      data-foliage-wind
+      className="landing-root relative flex min-h-[100dvh] flex-col bg-[#ded8d1] text-[#1a1a1a]"
+    >
+      <section className="relative flex min-h-[58vh] flex-1 flex-col overflow-hidden md:min-h-[62vh]">
+        <HeroLightingScene />
+        <div
+          className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-b from-transparent via-transparent to-[#ded8d1]/55"
+          aria-hidden
+        />
 
-          <TreeShadowOverlay variant="hero" revealDelay={1} />
-        </div>
-
-        {/* Interactive layer */}
         <motion.header
           className="relative z-20 px-6 pt-6 md:px-10 md:pt-8 lg:px-14"
-          {...reveal(0.3)}
+          {...softReveal(prefersReducedMotion, 0.15, 0.65)}
         >
           <Link
             href="/"
@@ -108,7 +93,7 @@ export function WaitlistLanding() {
         <motion.nav
           className="absolute right-4 top-4 z-30 flex items-center gap-2 md:right-10 md:top-8 lg:right-14"
           aria-label="Social links"
-          {...reveal(1.6, 0.7)}
+          {...softReveal(prefersReducedMotion, 0.45, 0.6)}
         >
           <a
             href={SITE_CONFIG.social.instagram}
@@ -132,9 +117,7 @@ export function WaitlistLanding() {
 
         <motion.div
           className="relative z-20 mt-auto px-6 pb-10 md:px-10 md:pb-14 lg:px-14"
-          initial={prefersReducedMotion ? false : { opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.3, duration: 0.9, ease: EASING }}
+          {...softReveal(prefersReducedMotion, 0.28, 0.75)}
         >
           <div className="max-w-md">
             <h1 className="font-landing text-2xl font-normal leading-snug tracking-[0.06em] text-white md:text-3xl lg:text-[2rem]">
@@ -152,18 +135,16 @@ export function WaitlistLanding() {
         </motion.div>
       </section>
 
-      <section className="relative z-10 overflow-hidden border-t border-black/5 bg-[#ded8d1] px-6 py-12 md:px-10 md:py-16 lg:px-14">
-        <TreeShadowOverlay
-          variant="panel"
-          revealDelay={1}
-          className="mix-blend-multiply"
+      <section className="relative z-10 min-h-[38vh] overflow-hidden px-6 py-12 md:px-10 md:py-16 lg:px-14">
+        <WaitlistLightingScene />
+        <div
+          className="pointer-events-none absolute inset-0 z-[1] bg-[#ded8d1]/25"
+          aria-hidden
         />
 
         <motion.div
           className="relative z-20 mx-auto flex max-w-xl flex-col items-center text-center"
-          initial={prefersReducedMotion ? false : { opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.6, duration: 0.85, ease: EASING }}
+          {...softReveal(prefersReducedMotion, 0.4, 0.75)}
         >
           <div className="mb-8 flex flex-col items-center gap-4">
             <span className="h-px w-10 bg-[#1a1a1a]/80" aria-hidden />
@@ -196,7 +177,7 @@ export function WaitlistLanding() {
                 placeholder="ENTER YOUR EMAIL"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="h-12 min-h-12 flex-1 border border-[#1a1a1a] bg-[#e8e4df] px-4 text-center text-[10px] tracking-[0.22em] text-[#1a1a1a] placeholder:text-[#1a1a1a]/45 outline-none transition-colors focus:bg-[#f0ece8] sm:text-left"
+                className="h-12 min-h-12 flex-1 border border-[#1a1a1a] bg-[#e8e4df]/95 px-4 text-center text-[10px] tracking-[0.22em] text-[#1a1a1a] placeholder:text-[#1a1a1a]/45 outline-none backdrop-blur-[1px] transition-colors focus:bg-[#f0ece8] sm:text-left"
               />
               <button
                 type="submit"

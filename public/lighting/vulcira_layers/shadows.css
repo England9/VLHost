@@ -1,0 +1,11 @@
+/* Example: <section class="hero"><div class="shadow-mask" aria-hidden="true"><div class="foliage"></div></div><div class="content">...</div></section> */
+.hero, .waitlist { position: relative; isolation: isolate; overflow: hidden; background-size: cover; background-position: center; }
+.hero { background-image: url('hero-clean.webp'); aspect-ratio: 1882 / 836; }
+.waitlist { background-image: url('waitlist-clean.webp'); }
+.shadow-mask { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
+.hero .shadow-mask { mask: url('hero-shadow-mask.png') center / cover no-repeat; }
+.foliage { position: absolute; inset: -9%; background: url('foliage-shadow.webp') center / cover no-repeat; opacity: .85; animation: vulcira-breeze 29s ease-in-out infinite alternate; will-change: transform; }
+.waitlist .foliage { animation-duration: 31s; animation-delay: -3s; }
+.content { position: relative; z-index: 1; }
+@keyframes vulcira-breeze { 0% { transform: translate(-1.2%, -.5%) rotate(-1deg); } 36% { transform: translate(.5%, .7%) rotate(.4deg); } 72% { transform: translate(-.3%, .2%) rotate(-.2deg); } 100% { transform: translate(1.4%, -.6%) rotate(1deg); } }
+@media (prefers-reduced-motion: reduce) { .foliage { animation: none; will-change: auto; } }

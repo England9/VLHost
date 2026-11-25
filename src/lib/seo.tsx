@@ -21,7 +21,8 @@ export function createMetadata({
     : `${name} — ${SITE_CONFIG.tagline}`;
   const pageDescription = desc || description;
   const canonical = `${url}${path}`;
-  const ogImage = image || `${url}/images/vulcira-hero-editorial.jpg`;
+  const ogImage =
+    image || `${url}/lighting/vulcira_layers/hero-clean.webp`;
 
   return {
     title: pageTitle,
