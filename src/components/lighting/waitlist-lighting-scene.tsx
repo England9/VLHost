@@ -4,12 +4,9 @@ import { motion, useReducedMotion } from "framer-motion";
 import { LIGHTING_ASSETS } from "@/lib/foliage-wind";
 import { DualExposurePlate } from "@/components/lighting/dual-exposure-plate";
 import { EASING } from "@/lib/constants";
+import { introContentDelay } from "@/lib/intro-timing";
 
-export function WaitlistLightingScene({
-  delayShift = 0,
-}: {
-  delayShift?: number;
-}) {
+export function WaitlistLightingScene() {
   const prefersReducedMotion = useReducedMotion();
 
   return (
@@ -18,7 +15,7 @@ export function WaitlistLightingScene({
       initial={prefersReducedMotion ? false : { opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{
-        delay: prefersReducedMotion ? 0 : 1 + delayShift,
+        delay: introContentDelay(prefersReducedMotion, 1),
         duration: 0.9,
         ease: EASING,
       }}

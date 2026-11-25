@@ -4,9 +4,11 @@ import { motion, useReducedMotion } from "framer-motion";
 import { LIGHTING_ASSETS } from "@/lib/foliage-wind";
 import { DualExposurePlate } from "@/components/lighting/dual-exposure-plate";
 import { EASING } from "@/lib/constants";
+import { heroRevealDelay } from "@/lib/intro-timing";
 
-export function HeroLightingScene({ delayShift = 0 }: { delayShift?: number }) {
+export function HeroLightingScene() {
   const prefersReducedMotion = useReducedMotion();
+  const heroDelay = heroRevealDelay(prefersReducedMotion);
 
   return (
     <motion.div
@@ -14,8 +16,8 @@ export function HeroLightingScene({ delayShift = 0 }: { delayShift?: number }) {
       initial={prefersReducedMotion ? false : { opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{
-        delay: prefersReducedMotion ? 0 : 0.7 + delayShift,
-        duration: 1.1,
+        delay: heroDelay,
+        duration: 0.95,
         ease: EASING,
       }}
     >
