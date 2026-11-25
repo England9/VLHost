@@ -50,20 +50,38 @@ export function createMetadata({
     icons: {
       icon: [
         {
-          url: "/favicon-32.png",
+          url: "/brand/micro-black-32.png",
           sizes: "32x32",
           type: "image/png",
           media: "(prefers-color-scheme: light)",
         },
         {
-          url: "/favicon-32-white.png",
+          url: "/brand/micro-white-32.png",
           sizes: "32x32",
           type: "image/png",
           media: "(prefers-color-scheme: dark)",
         },
+        {
+          url: "/brand/micro-black.svg",
+          sizes: "any",
+          type: "image/svg+xml",
+          media: "(prefers-color-scheme: light)",
+        },
+        {
+          url: "/brand/micro-white.svg",
+          sizes: "any",
+          type: "image/svg+xml",
+          media: "(prefers-color-scheme: dark)",
+        },
         { url: "/favicon.ico", sizes: "any", type: "image/x-icon" },
       ],
-      apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
+      apple: [
+        {
+          url: "/brand/micro-black-128.png",
+          sizes: "128x128",
+          type: "image/png",
+        },
+      ],
     },
   };
 }

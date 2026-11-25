@@ -40,7 +40,7 @@ export function WaitlistLanding() {
   const prefersReducedMotion = useReducedMotion();
   const { controls, update, reset } = useLightingControls();
   const [windActive, setWindActive] = useState(Boolean(prefersReducedMotion));
-  const [entranceShift, setEntranceShift] = useState(0);
+  const [entranceShift, setEntranceShift] = useState(ENTRANCE_TOTAL_S);
 
   useEffect(() => {
     if (prefersReducedMotion) {

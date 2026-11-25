@@ -1,8 +1,9 @@
-VULCIRA brand assets
+VULCIRA LOGO KIT V2 (canonical)
 
-reveal-white.svg — entrance mark (construction + primary layers); replace with
-vector SVG from design when available without changing geometry paths.
+reveal-white.svg / reveal-black.svg — 1.45s inline SMIL construction reveal.
+Use inline SVG on the site entrance (not <img>); replay via setCurrentTime(0).
 
-reveal-construction.png / reveal-symbol.png — raster sources tied to reveal-white.svg
-micro-logo-black.svg / micro-logo-white.svg — favicons (black on light, white on dark)
-reveal-symbol.png — full circular mark for larger in-page use
+micro-black.svg / micro-white.svg — thick-line favicons; prefer micro-*-32.png+.
+master-clean-*.svg — final frame geometry for reduced-motion fallback.
+
+Open preview.html locally to replay the reveal.
