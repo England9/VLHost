@@ -1,7 +1,8 @@
-/** Logo SVG ~1.45s; hero crossfade begins before overlay lifts */
-export const ENTRANCE_TOTAL_S = 2.03;
+/** Logo SMIL ~1.45s; exit zoom + fade ~0.95s */
+export const LOGO_EXIT_START_S = 1.48;
+export const LOGO_EXIT_DURATION_S = 0.95;
+export const ENTRANCE_TOTAL_S = LOGO_EXIT_START_S + LOGO_EXIT_DURATION_S;
 export const HERO_HANDOFF_S = 1.28;
-export const UI_REVEAL_S = 1.85;
 
 export function heroRevealDelay(prefersReducedMotion: boolean | null): number {
   if (prefersReducedMotion) return 0;

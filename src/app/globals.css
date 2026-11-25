@@ -46,14 +46,6 @@ html {
   }
 }
 
-html[data-intro="active"] .landing-waitlist-section {
-  visibility: hidden;
-}
-
-html[data-intro="done"] .landing-waitlist-section {
-  visibility: visible;
-}
-
 body {
   background: #ded8d1;
   color: #1a1a1a;

@@ -10,7 +10,7 @@ import { useFoliageWind } from "@/hooks/use-foliage-wind";
 import { useLightingControls } from "@/hooks/use-lighting-controls";
 import { LightingControlPanel } from "@/components/lighting/lighting-control-panel";
 import { VulciraLogoEntrance } from "@/components/brand/vulcira-logo-entrance";
-import { ENTRANCE_TOTAL_S, UI_REVEAL_S } from "@/lib/intro-timing";
+import { ENTRANCE_TOTAL_S } from "@/lib/intro-timing";
 import { DEV_SHADOW_MENU_UNLOCK } from "@/lib/lighting-controls";
 import { SITE_CONFIG, EASING } from "@/lib/constants";
 
@@ -46,18 +46,11 @@ export function WaitlistLanding() {
       setWindActive(true);
       return;
     }
-    const uiAt = window.setTimeout(
-      () => setUiVisible(true),
-      UI_REVEAL_S * 1000
-    );
     const windAt = window.setTimeout(
       () => setWindActive(true),
       (ENTRANCE_TOTAL_S + 0.2) * 1000
     );
-    return () => {
-      window.clearTimeout(uiAt);
-      window.clearTimeout(windAt);
-    };
+    return () => window.clearTimeout(windAt);
   }, [prefersReducedMotion]);
 
   const windRootRef = useFoliageWind(
@@ -90,7 +83,7 @@ export function WaitlistLanding() {
 
   return (
     <>
-      <VulciraLogoEntrance onFinished={() => setUiVisible(true)} />
+      <VulciraLogoEntrance onHandoff={() => setUiVisible(true)} />
       <div
         ref={windRootRef}
         data-foliage-wind
@@ -105,7 +98,7 @@ export function WaitlistLanding() {
             className="contents"
             initial={false}
             animate={{ opacity: uiVisible ? 1 : 0 }}
-            transition={{ duration: 0.55, ease: EASING }}
+            transition={{ duration: 0.35, ease: EASING }}
           >
             <header className="relative z-20 px-6 pt-6 md:px-10 md:pt-8 lg:px-14">
               <Link
@@ -161,12 +154,7 @@ export function WaitlistLanding() {
         <section className="landing-waitlist-section landing-section-lit relative z-10 min-h-[38vh] overflow-hidden px-6 py-12 md:px-10 md:py-16 lg:px-14">
           <WaitlistLightingScene />
 
-          <motion.div
-            className="relative z-20 mx-auto flex max-w-xl flex-col items-center text-center"
-            initial={false}
-            animate={{ opacity: uiVisible ? 1 : 0 }}
-            transition={{ duration: 0.55, ease: EASING }}
-          >
+          <div className="relative z-20 mx-auto flex max-w-xl flex-col items-center text-center">
             <div className="mb-8 flex flex-col items-center gap-4">
               <span className="h-px w-10 bg-[#1a1a1a]/80" aria-hidden />
               <p className="text-[10px] tracking-[0.35em] text-[#1a1a1a]/90">
@@ -208,7 +196,7 @@ export function WaitlistLanding() {
                 </button>
               </form>
             )}
-          </motion.div>
+          </div>
         </section>
 
         {showLightingPanel && (

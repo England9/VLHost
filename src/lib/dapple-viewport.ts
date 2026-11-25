@@ -12,7 +12,7 @@ export function applyDappleViewport(
   const cover = Math.max(w, h) / Math.min(w, h);
 
   el.style.setProperty("--mask-size-px", `${maskPx}px`);
-  el.style.setProperty("--mask-rotate", portrait ? "90deg" : "0deg");
+  el.style.setProperty("--mask-rotate", "0deg");
   el.style.setProperty(
     "--dapple-orient-scale",
     portrait ? String(Math.max(1.12, cover * 0.72)) : "1"
