@@ -23,19 +23,20 @@ export type LightingControls = {
   shadowStacks: number;
 };
 
+/** Shipped look — update PRESET_ID when this changes to rebake visitors’ saved sliders. */
 export const DEFAULT_LIGHTING: LightingControls = {
   brightness: 2.05,
-  contrast: 1.14,
-  saturate: 1.06,
+  contrast: 1.4,
+  saturate: 1.3,
   litMix: 1,
   maskScale: 128,
   maskOffsetX: 0,
   maskOffsetY: 0,
-  invertMask: false,
-  motionEnabled: false,
-  motionScale: 1,
-  windSpeed: 1,
-  shadowOpacity: 0.08,
+  invertMask: true,
+  motionEnabled: true,
+  motionScale: 1.35,
+  windSpeed: 0.7,
+  shadowOpacity: 0,
   secondaryLayerMix: 0.55,
   devMode: false,
   shadowUnlinkWind: true,
@@ -47,13 +48,22 @@ export const DEFAULT_LIGHTING: LightingControls = {
 };
 
 const STORAGE_KEY = "vulcira-lighting-controls";
+const PRESET_ID = "perfect-invert-v1";
+
+type StoredLighting = LightingControls & { __presetId?: string };
 
 export function loadLightingControls(): LightingControls {
-  if (typeof window === "undefined") return DEFAULT_LIGHTING;
+  if (typeof window === "undefined") return { ...DEFAULT_LIGHTING };
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return { ...DEFAULT_LIGHTING };
-    return { ...DEFAULT_LIGHTING, ...JSON.parse(raw) };
+    const parsed = JSON.parse(raw) as StoredLighting;
+    if (parsed.__presetId !== PRESET_ID) {
+      saveLightingControls({ ...DEFAULT_LIGHTING });
+      return { ...DEFAULT_LIGHTING };
+    }
+    const { __presetId: _preset, ...rest } = parsed;
+    return { ...DEFAULT_LIGHTING, ...rest };
   } catch {
     return { ...DEFAULT_LIGHTING };
   }
@@ -61,11 +71,14 @@ export function loadLightingControls(): LightingControls {
 
 export function saveLightingControls(controls: LightingControls) {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(controls));
+    const payload: StoredLighting = { ...controls, __presetId: PRESET_ID };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
   } catch {
     /* ignore */
   }
 }
+
+export const DEV_SHADOW_MENU_UNLOCK = "DEV_SHADOW_MENU";
 
 export function controlsToCssVars(c: LightingControls): Record<string, string> {
   return {

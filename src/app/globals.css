@@ -6,13 +6,13 @@
   --sun-reveal-mask: url("/lighting/vulcira_layers/foliage-sun-reveal.webp");
 
   --lit-brightness: 2.05;
-  --lit-contrast: 1.14;
-  --lit-saturate: 1.06;
+  --lit-contrast: 1.4;
+  --lit-saturate: 1.3;
   --lit-mix: 1;
   --mask-scale: 128%;
   --mask-ox: 0px;
   --mask-oy: 0px;
-  --shadow-op: 0.08;
+  --shadow-op: 0;
   --layer-b-mix: 0.55;
 
   --mx: 0px;

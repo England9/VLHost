@@ -9,7 +9,10 @@ import { WaitlistLightingScene } from "@/components/lighting/waitlist-lighting-s
 import { useFoliageWind } from "@/hooks/use-foliage-wind";
 import { useLightingControls } from "@/hooks/use-lighting-controls";
 import { LightingControlPanel } from "@/components/lighting/lighting-control-panel";
+import { DEV_SHADOW_MENU_UNLOCK } from "@/lib/lighting-controls";
 import { SITE_CONFIG, EASING } from "@/lib/constants";
+
+const DEV_PANEL_UNLOCK = DEV_SHADOW_MENU_UNLOCK;
 
 function TikTokIcon({ className }: { className?: string }) {
   return (
@@ -55,10 +58,12 @@ export function WaitlistLanding() {
           transition: { delay, duration, ease: EASING },
         };
 
+  const showLightingPanel = email.trim() === DEV_PANEL_UNLOCK;
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const value = email.trim();
-    if (!value) return;
+    if (!value || value === DEV_PANEL_UNLOCK) return;
     try {
       const list = JSON.parse(
         localStorage.getItem("vulcira-waitlist") ?? "[]"
@@ -210,11 +215,13 @@ export function WaitlistLanding() {
         </motion.div>
       </section>
 
-      <LightingControlPanel
-        controls={controls}
-        onChange={update}
-        onReset={reset}
-      />
+      {showLightingPanel && (
+        <LightingControlPanel
+          controls={controls}
+          onChange={update}
+          onReset={reset}
+        />
+      )}
     </div>
   );
 }

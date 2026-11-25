@@ -101,7 +101,7 @@ export function LightingControlPanel({ controls, onChange, onReset }: Props) {
               label="Sun contrast"
               value={controls.contrast}
               min={0.9}
-              max={1.4}
+              max={1.45}
               step={0.01}
               onChange={(v) => onChange({ contrast: v })}
             />
@@ -109,7 +109,7 @@ export function LightingControlPanel({ controls, onChange, onReset }: Props) {
               label="Sun saturate"
               value={controls.saturate}
               min={0.9}
-              max={1.3}
+              max={1.35}
               step={0.01}
               onChange={(v) => onChange({ saturate: v })}
             />
