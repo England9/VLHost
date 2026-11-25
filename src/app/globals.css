@@ -121,13 +121,21 @@ body {
   mask-mode: alpha;
 }
 
+/* Scale base + lit + shadows together on narrow viewports (no rotated mask). */
+.dapple-unify {
+  position: absolute;
+  inset: 0;
+  transform: rotate(var(--mask-rotate, 0deg))
+    scale(var(--dapple-orient-scale, 1));
+  transform-origin: center center;
+  pointer-events: none;
+  overflow: hidden;
+}
+
 .dapple-orient {
   position: absolute;
   inset: 0;
   z-index: 1;
-  transform: rotate(var(--mask-rotate, 0deg))
-    scale(var(--dapple-orient-scale, 1));
-  transform-origin: center center;
   pointer-events: none;
   overflow: hidden;
 }

@@ -22,39 +22,41 @@ export function DualExposurePlate({
 
   return (
     <div className={`dual-exposure-plate ${plateClass}`}>
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={photoSrc}
-        alt=""
-        className={`dual-base ${photoClass}`}
-        fetchPriority={fetchPriority}
-        decoding="async"
-      />
+      <div className="dapple-unify" aria-hidden>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={photoSrc}
+          alt=""
+          className={`dual-base ${photoClass}`}
+          fetchPriority={fetchPriority}
+          decoding="async"
+        />
 
-      <div className="dapple-orient" aria-hidden>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={photoSrc}
-          alt=""
-          className={`dual-lit dual-lit--primary ${photoClass}`}
-          decoding="async"
-        />
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={photoSrc}
-          alt=""
-          className={`dual-lit dual-lit--secondary ${photoClass}`}
-          decoding="async"
-        />
-        <div className="shadow-stack">
-          {Array.from({ length: stacks }).map((_, i) => (
-            <div
-              key={i}
-              className="foliage-shadow-pass"
-              style={{ backgroundImage: foliage }}
-              data-stack={i}
-            />
-          ))}
+        <div className="dapple-orient">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={photoSrc}
+            alt=""
+            className={`dual-lit dual-lit--primary ${photoClass}`}
+            decoding="async"
+          />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={photoSrc}
+            alt=""
+            className={`dual-lit dual-lit--secondary ${photoClass}`}
+            decoding="async"
+          />
+          <div className="shadow-stack">
+            {Array.from({ length: stacks }).map((_, i) => (
+              <div
+                key={i}
+                className="foliage-shadow-pass"
+                style={{ backgroundImage: foliage }}
+                data-stack={i}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </div>
