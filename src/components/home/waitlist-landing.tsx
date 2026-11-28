@@ -1,36 +1,20 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import Link from "next/link";
-import { motion, useReducedMotion } from "framer-motion";
-import { Instagram } from "lucide-react";
+import { useReducedMotion } from "framer-motion";
 import { HeroLightingScene } from "@/components/lighting/hero-lighting-scene";
 import { WaitlistLightingScene } from "@/components/lighting/waitlist-lighting-scene";
 import { useFoliageWind } from "@/hooks/use-foliage-wind";
 import { useLightingControls } from "@/hooks/use-lighting-controls";
 import { LightingControlPanel } from "@/components/lighting/lighting-control-panel";
 import { VulciraLogoEntrance } from "@/components/brand/vulcira-logo-entrance";
+import { SiteNav } from "@/components/brand/site-nav";
+import { hasPlayedIntro } from "@/components/brand/intro-cover";
 import { ENTRANCE_TOTAL_S } from "@/lib/intro-timing";
 import { DEV_SHADOW_MENU_UNLOCK } from "@/lib/lighting-controls";
-import { SITE_CONFIG, EASING } from "@/lib/constants";
 
 const DEV_PANEL_UNLOCK = DEV_SHADOW_MENU_UNLOCK;
-
-function TikTokIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      className={className}
-      aria-hidden
-    >
-      <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z" />
-    </svg>
-  );
-}
-
-const linkClass =
-  "relative z-10 inline-flex min-h-11 min-w-11 items-center justify-center text-[10px] tracking-[0.28em] text-white transition-opacity hover:opacity-70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white";
 
 export function WaitlistLanding() {
   const [email, setEmail] = useState("");
@@ -39,9 +23,18 @@ export function WaitlistLanding() {
   const { controls, update, reset } = useLightingControls();
   const [uiVisible, setUiVisible] = useState(false);
   const [windActive, setWindActive] = useState(false);
+  const [skipIntro, setSkipIntro] = useState(false);
+
+  useLayoutEffect(() => {
+    if (prefersReducedMotion || hasPlayedIntro()) {
+      setSkipIntro(true);
+      setUiVisible(true);
+      setWindActive(true);
+    }
+  }, [prefersReducedMotion]);
 
   useEffect(() => {
-    if (prefersReducedMotion) {
+    if (prefersReducedMotion || skipIntro) {
       setUiVisible(true);
       setWindActive(true);
       return;
@@ -51,7 +44,7 @@ export function WaitlistLanding() {
       (ENTRANCE_TOTAL_S + 0.2) * 1000
     );
     return () => window.clearTimeout(windAt);
-  }, [prefersReducedMotion]);
+  }, [prefersReducedMotion, skipIntro]);
 
   const windRootRef = useFoliageWind(
     !prefersReducedMotion && controls.motionEnabled,
@@ -89,16 +82,15 @@ export function WaitlistLanding() {
         data-foliage-wind
         data-invert-mask={controls.invertMask ? "1" : "0"}
         data-dev-mode={controls.devMode ? "1" : "0"}
+        data-intro-gate
         className="landing-root relative flex min-h-[100dvh] flex-col bg-[#ded8d1] text-[#1a1a1a]"
       >
         <section className="landing-section-lit relative flex min-h-[58vh] flex-1 flex-col border-b border-[#1a1a1a]/8 overflow-hidden bg-[#0a0a0a] md:min-h-[62vh]">
           <HeroLightingScene />
 
-          <motion.div
-            className="contents"
-            initial={false}
-            animate={{ opacity: uiVisible ? 1 : 0 }}
-            transition={{ duration: 0.35, ease: EASING }}
+          <div
+            className="absolute inset-0 z-20 flex flex-col transition-opacity duration-300 ease-out"
+            style={{ opacity: uiVisible ? 1 : 0 }}
           >
             <header className="relative z-20 px-6 pt-6 md:px-10 md:pt-8 lg:px-14">
               <Link
@@ -109,29 +101,7 @@ export function WaitlistLanding() {
               </Link>
             </header>
 
-            <nav
-              className="absolute right-4 top-4 z-30 flex items-center gap-2 md:right-10 md:top-8 lg:right-14"
-              aria-label="Social links"
-            >
-              <a
-                href={SITE_CONFIG.social.instagram}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`${linkClass} px-2`}
-                aria-label="VULCIRA on Instagram"
-              >
-                <Instagram className="h-4 w-4 stroke-[1.5]" />
-              </a>
-              <a
-                href={SITE_CONFIG.social.tiktok}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`${linkClass} px-2`}
-                aria-label="VULCIRA on TikTok"
-              >
-                <TikTokIcon className="h-4 w-4" />
-              </a>
-            </nav>
+            <SiteNav tone="light" />
 
             <div className="relative z-20 mt-auto px-6 pb-10 md:px-10 md:pb-14 lg:px-14">
               <div className="max-w-md">
@@ -148,7 +118,7 @@ export function WaitlistLanding() {
                 </div>
               </div>
             </div>
-          </motion.div>
+          </div>
         </section>
 
         <section className="landing-waitlist-section landing-section-lit relative z-10 min-h-[38vh] overflow-hidden px-6 py-12 md:px-10 md:py-16 lg:px-14">

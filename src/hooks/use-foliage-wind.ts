@@ -1,14 +1,21 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef } from "react";
 import {
   computeFoliageWind,
-  reducedMotionFoliageWind,
   type FoliageWindVars,
 } from "@/lib/foliage-wind";
 import type { LightingControls } from "@/lib/lighting-controls";
 import { controlsToCssVars } from "@/lib/lighting-controls";
 import { applyDappleViewport } from "@/lib/dapple-viewport";
+
+/** Ease wind/mask motion in so dapples don't snap into place. */
+const WIND_RAMP_S = 1.35;
+
+function smoothstep(t: number) {
+  const x = Math.min(1, Math.max(0, t));
+  return x * x * (3 - 2 * x);
+}
 
 function applyWindMask(el: HTMLElement, vars: FoliageWindVars, scale: number) {
   const parsePx = (s: string) => parseFloat(s) * scale;
@@ -37,6 +44,12 @@ export function useFoliageWind(
   const pausedRef = useRef(false);
   const controlsRef = useRef(controls);
   controlsRef.current = controls;
+
+  useLayoutEffect(() => {
+    const el = rootRef.current;
+    if (!el) return;
+    applyControls(el, controlsRef.current);
+  }, []);
 
   useEffect(() => {
     const sync = () => {
@@ -117,13 +130,14 @@ export function useFoliageWind(
       if (document.hidden || pausedRef.current) return;
       if (now - lastUpdate < 16) return;
       lastUpdate = now;
-      const t =
-        ((now - start) / 1000) * controlsRef.current.windSpeed;
+      const elapsed = (now - start) / 1000;
+      const ramp = smoothstep(elapsed / WIND_RAMP_S);
+      const t = elapsed * controlsRef.current.windSpeed;
       const vars = computeFoliageWind(t, 1);
-      applyWindMask(el, vars, controlsRef.current.motionScale);
+      applyWindMask(el, vars, controlsRef.current.motionScale * ramp);
     };
 
-    applyWindMask(el, computeFoliageWind(0, 1), 0);
+    holdStatic();
     frame = requestAnimationFrame(tick);
 
     return () => cancelAnimationFrame(frame);

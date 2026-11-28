@@ -6,6 +6,7 @@ import { EASING } from "@/lib/constants";
 import {
   dismissIntroCover,
   finishIntroCover,
+  hasPlayedIntro,
 } from "@/components/brand/intro-cover";
 import {
   LOGO_EXIT_DURATION_S,
@@ -26,19 +27,33 @@ export function VulciraLogoEntrance({
 }) {
   const prefersReducedMotion = useReducedMotion();
   const svgHostRef = useRef<HTMLDivElement>(null);
+  const onHandoffRef = useRef(onHandoff);
+  const onFinishedRef = useRef(onFinished);
+  onHandoffRef.current = onHandoff;
+  onFinishedRef.current = onFinished;
+
   const [svgMarkup, setSvgMarkup] = useState<string | null>(null);
-  const [active, setActive] = useState(true);
+  const [active, setActive] = useState(false);
+  const [ready, setReady] = useState(false);
   const [fading, setFading] = useState(false);
   const handoffCalledRef = useRef(false);
 
-  useEffect(() => {
-    if (prefersReducedMotion) {
+  useLayoutEffect(() => {
+    if (prefersReducedMotion || hasPlayedIntro()) {
       setActive(false);
+      setReady(true);
       finishIntroCover();
-      onHandoff?.();
-      onFinished?.();
+      onHandoffRef.current?.();
+      onFinishedRef.current?.();
       return;
     }
+    setActive(true);
+    setReady(true);
+  }, [prefersReducedMotion]);
+
+  useEffect(() => {
+    if (!ready || !active || prefersReducedMotion) return;
+
     fetch(REVEAL_SVG)
       .then((r) => r.text())
       .then(setSvgMarkup)
@@ -48,13 +63,13 @@ export function VulciraLogoEntrance({
       LOGO_EXIT_START_S * 1000
     );
     return () => window.clearTimeout(fadeAt);
-  }, [prefersReducedMotion, onHandoff, onFinished]);
+  }, [ready, active, prefersReducedMotion]);
 
   useEffect(() => {
     if (!fading || handoffCalledRef.current) return;
     handoffCalledRef.current = true;
-    onHandoff?.();
-  }, [fading, onHandoff]);
+    onHandoffRef.current?.();
+  }, [fading]);
 
   useLayoutEffect(() => {
     if (!active || prefersReducedMotion || !svgMarkup) return;
@@ -77,7 +92,7 @@ export function VulciraLogoEntrance({
     }
   }, [svgMarkup]);
 
-  if (!active || prefersReducedMotion) return null;
+  if (!ready || !active || prefersReducedMotion) return null;
 
   const exitEase = EASING;
 
@@ -94,7 +109,7 @@ export function VulciraLogoEntrance({
         if (!fading) return;
         setActive(false);
         finishIntroCover();
-        onFinished?.();
+        onFinishedRef.current?.();
       }}
       aria-hidden
     >

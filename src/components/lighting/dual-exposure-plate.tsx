@@ -1,5 +1,6 @@
 "use client";
 
+import type { CSSProperties } from "react";
 import { LIGHTING_ASSETS } from "@/lib/foliage-wind";
 import { useLightingControls } from "@/hooks/use-lighting-controls";
 
@@ -8,6 +9,8 @@ type DualExposurePlateProps = {
   photoClass: string;
   plateClass: string;
   fetchPriority?: "high" | "low" | "auto";
+  /** Horizontally mirrored foliage / sun masks (contact page). */
+  flipMask?: boolean;
 };
 
 export function DualExposurePlate({
@@ -15,13 +18,28 @@ export function DualExposurePlate({
   photoClass,
   plateClass,
   fetchPriority,
+  flipMask = false,
 }: DualExposurePlateProps) {
   const { controls } = useLightingControls();
-  const foliage = `url(${LIGHTING_ASSETS.foliage})`;
+  const foliageUrl = flipMask
+    ? LIGHTING_ASSETS.foliageFlip
+    : LIGHTING_ASSETS.foliage;
+  const foliage = `url(${foliageUrl})`;
   const stacks = Math.min(8, Math.max(1, Math.round(controls.shadowStacks)));
 
   return (
-    <div className={`dual-exposure-plate ${plateClass}`}>
+    <div
+      className={`dual-exposure-plate ${plateClass}`}
+      data-mask-flip={flipMask ? "1" : "0"}
+      style={
+        flipMask
+          ? ({
+              "--foliage-texture": `url(${LIGHTING_ASSETS.foliageFlip})`,
+              "--sun-reveal-mask": `url(${LIGHTING_ASSETS.sunRevealFlip})`,
+            } as CSSProperties)
+          : undefined
+      }
+    >
       <div className="dapple-unify" aria-hidden>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img

@@ -5,6 +5,9 @@ export const SITE_CONFIG = {
     "VULCIRA is coming soon. Join the waitlist for early access to global fashion made accessible.",
   url: process.env.NEXT_PUBLIC_SITE_URL || "https://vulcira.com",
   locale: "en_US",
+  contactEmail: "vulcira@gmail.com",
+  company: "Apollo Twelve LLC",
+  location: "Honolulu, Hawaii, USA",
   social: {
     instagram: "https://instagram.com/vulcira.official",
     tiktok: "https://www.tiktok.com/@vulcira",
