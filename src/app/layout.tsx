@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Syne } from "next/font/google";
+import { Inter, Instrument_Serif, Syne } from "next/font/google";
 import { createMetadata, JsonLd, organizationJsonLd, websiteJsonLd } from "@/lib/seo";
 import { IntroCoverTeardown } from "@/components/brand/intro-cover";
 import "./globals.css";
@@ -17,6 +17,13 @@ const syne = Syne({
   display: "swap",
 });
 
+const editorial = Instrument_Serif({
+  variable: "--font-editorial",
+  subsets: ["latin"],
+  weight: "400",
+  display: "swap",
+});
+
 export const metadata: Metadata = createMetadata({});
 
 export default function RootLayout({
@@ -25,7 +32,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${syne.variable}`}>
+    <html
+      lang="en"
+      className={`${inter.variable} ${syne.variable} ${editorial.variable}`}
+    >
       <head>
         <meta name="theme-color" content="#0a0a0a" />
         <link rel="manifest" href="/manifest.webmanifest" />
@@ -37,7 +47,7 @@ export default function RootLayout({
         />
         <style
           dangerouslySetInnerHTML={{
-            __html: `#vulcira-intro-cover{position:fixed;inset:0;z-index:110;background:#0a0a0a;pointer-events:none}html:not([data-intro]) .landing-root{visibility:hidden}`,
+            __html: `#vulcira-intro-cover{position:fixed;inset:0;z-index:110;background:#0a0a0a;pointer-events:none}html:not([data-intro]) .landing-root[data-intro-gate]{visibility:hidden}`,
           }}
         />
       </head>
