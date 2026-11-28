@@ -3,11 +3,10 @@
 import { useLayoutEffect } from "react";
 import { finishIntroCover } from "@/components/brand/intro-cover";
 
-/** Dismisses the home logo veil on routes that skip the entrance. */
+/** Marks intro complete on routes that skip the logo entrance. */
 export function SkipIntro() {
   useLayoutEffect(() => {
     finishIntroCover();
-    document.getElementById("vulcira-intro-cover")?.remove();
   }, []);
 
   return null;

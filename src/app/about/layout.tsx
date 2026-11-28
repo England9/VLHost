@@ -7,7 +7,7 @@ export default function AboutLayout({
     <>
       <script
         dangerouslySetInnerHTML={{
-          __html: `document.documentElement.dataset.intro="done";document.getElementById("vulcira-intro-cover")?.remove();`,
+          __html: `document.documentElement.dataset.intro="done";`,
         }}
       />
       {children}

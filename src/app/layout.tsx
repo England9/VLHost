@@ -47,7 +47,7 @@ export default function RootLayout({
         />
         <style
           dangerouslySetInnerHTML={{
-            __html: `#vulcira-intro-cover{position:fixed;inset:0;z-index:110;background:#0a0a0a;pointer-events:none}html:not([data-intro]) .landing-root[data-intro-gate]{visibility:hidden}`,
+            __html: `#vulcira-intro-cover{position:fixed;inset:0;z-index:110;background:#0a0a0a;pointer-events:none}html[data-intro="done"] #vulcira-intro-cover,html[data-intro="active"] #vulcira-intro-cover{opacity:0;visibility:hidden;pointer-events:none}html:not([data-intro]) .landing-root[data-intro-gate]{visibility:hidden}`,
           }}
         />
       </head>

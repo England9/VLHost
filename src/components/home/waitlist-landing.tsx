@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { motion, useReducedMotion } from "framer-motion";
+import { useReducedMotion } from "framer-motion";
 import { HeroLightingScene } from "@/components/lighting/hero-lighting-scene";
 import { WaitlistLightingScene } from "@/components/lighting/waitlist-lighting-scene";
 import { useFoliageWind } from "@/hooks/use-foliage-wind";
@@ -12,7 +12,6 @@ import { VulciraLogoEntrance } from "@/components/brand/vulcira-logo-entrance";
 import { SiteNav } from "@/components/brand/site-nav";
 import { ENTRANCE_TOTAL_S } from "@/lib/intro-timing";
 import { DEV_SHADOW_MENU_UNLOCK } from "@/lib/lighting-controls";
-import { EASING } from "@/lib/constants";
 
 const DEV_PANEL_UNLOCK = DEV_SHADOW_MENU_UNLOCK;
 
@@ -79,11 +78,9 @@ export function WaitlistLanding() {
         <section className="landing-section-lit relative flex min-h-[58vh] flex-1 flex-col border-b border-[#1a1a1a]/8 overflow-hidden bg-[#0a0a0a] md:min-h-[62vh]">
           <HeroLightingScene />
 
-          <motion.div
-            className="contents"
-            initial={false}
-            animate={{ opacity: uiVisible ? 1 : 0 }}
-            transition={{ duration: 0.35, ease: EASING }}
+          <div
+            className="absolute inset-0 z-20 flex flex-col transition-opacity duration-300 ease-out"
+            style={{ opacity: uiVisible ? 1 : 0 }}
           >
             <header className="relative z-20 px-6 pt-6 md:px-10 md:pt-8 lg:px-14">
               <Link
@@ -111,7 +108,7 @@ export function WaitlistLanding() {
                 </div>
               </div>
             </div>
-          </motion.div>
+          </div>
         </section>
 
         <section className="landing-waitlist-section landing-section-lit relative z-10 min-h-[38vh] overflow-hidden px-6 py-12 md:px-10 md:py-16 lg:px-14">

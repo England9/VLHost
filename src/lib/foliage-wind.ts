@@ -96,6 +96,7 @@ export const LIGHTING_ASSETS = {
   hero: "/lighting/vulcira_layers/hero-clean.webp",
   waitlist: "/lighting/vulcira_layers/waitlist-clean.webp",
   contact: "/lighting/vulcira_layers/contact-clean.webp",
+  about: "/lighting/vulcira_layers/about-clean.webp",
   foliage: "/lighting/vulcira_layers/foliage-shadow.webp",
   foliageFlip: "/lighting/vulcira_layers/foliage-shadow-flip.webp",
   sunReveal: "/lighting/vulcira_layers/foliage-sun-reveal.webp",

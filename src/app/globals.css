@@ -65,13 +65,15 @@ body {
 }
 
 .landing-root,
-.contact-root {
+.contact-root,
+.about-root {
   -webkit-font-smoothing: antialiased;
 }
 
 .hero-plate,
 .waitlist-plate,
-.contact-plate {
+.contact-plate,
+.about-plate {
   isolation: isolate;
 }
 
@@ -87,6 +89,10 @@ body {
   object-position: 58% center;
 }
 
+.about-photo {
+  object-position: 72% center;
+}
+
 @media (min-width: 768px) {
   .hero-photo {
     object-position: 72% 20%;
@@ -94,6 +100,10 @@ body {
 
   .contact-photo {
     object-position: 62% 42%;
+  }
+
+  .about-photo {
+    object-position: 78% 40%;
   }
 }
 
@@ -107,6 +117,7 @@ body {
 [data-foliage-wind][data-dev-mode="1"] .hero-plate,
 [data-foliage-wind][data-dev-mode="1"] .waitlist-plate,
 [data-foliage-wind][data-dev-mode="1"] .contact-plate,
+[data-foliage-wind][data-dev-mode="1"] .about-plate,
 [data-foliage-wind][data-dev-mode="1"] .landing-section-lit {
   overflow: visible;
 }
