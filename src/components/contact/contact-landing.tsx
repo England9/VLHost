@@ -10,6 +10,7 @@ import { LightingControlPanel } from "@/components/lighting/lighting-control-pan
 import { SiteNav } from "@/components/brand/site-nav";
 import { SkipIntro } from "@/components/brand/skip-intro";
 import { DEV_SHADOW_MENU_UNLOCK } from "@/lib/lighting-controls";
+import { SITE_CONFIG } from "@/lib/constants";
 
 const DEV_PANEL_UNLOCK = DEV_SHADOW_MENU_UNLOCK;
 
@@ -142,16 +143,16 @@ export function ContactLanding() {
                   <dt className="font-medium">EMAIL</dt>
                   <dd>
                     <a
-                      href="mailto:business@vulcira.com"
+                      href={`mailto:${SITE_CONFIG.contactEmail}`}
                       className="text-[#1a1a1a]/70 transition-opacity hover:opacity-70"
                     >
-                      — business@vulcira.com
+                      — {SITE_CONFIG.contactEmail}
                     </a>
                   </dd>
                 </div>
                 <div className="flex flex-wrap gap-x-2 gap-y-1">
                   <dt className="font-medium">COMPANY</dt>
-                  <dd className="text-[#1a1a1a]/70">— VULCIRA LLC</dd>
+                  <dd className="text-[#1a1a1a]/70">— {SITE_CONFIG.company}</dd>
                 </div>
                 <div className="flex flex-wrap gap-x-2 gap-y-1">
                   <dt className="font-medium">LOCATION</dt>
