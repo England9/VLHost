@@ -32,6 +32,13 @@
   --shadow-texture-scale: 128%;
 }
 
+/* Approximate portrait plate scale before JS runs (avoids first-paint jump). */
+@media (orientation: portrait) and (max-width: 900px) {
+  :root {
+    --dapple-orient-scale: 1.22;
+  }
+}
+
 @theme inline {
   --font-body: var(--font-inter);
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useLayoutEffect, useState } from "react";
 import {
   DEFAULT_LIGHTING,
   loadLightingControls,
@@ -12,7 +12,7 @@ export function useLightingControls() {
   const [controls, setControls] = useState<LightingControls>(DEFAULT_LIGHTING);
   const [hydrated, setHydrated] = useState(false);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     setControls(loadLightingControls());
     setHydrated(true);
   }, []);

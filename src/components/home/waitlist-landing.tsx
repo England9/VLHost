@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import Link from "next/link";
 import { useReducedMotion } from "framer-motion";
 import { HeroLightingScene } from "@/components/lighting/hero-lighting-scene";
@@ -10,6 +10,7 @@ import { useLightingControls } from "@/hooks/use-lighting-controls";
 import { LightingControlPanel } from "@/components/lighting/lighting-control-panel";
 import { VulciraLogoEntrance } from "@/components/brand/vulcira-logo-entrance";
 import { SiteNav } from "@/components/brand/site-nav";
+import { hasPlayedIntro } from "@/components/brand/intro-cover";
 import { ENTRANCE_TOTAL_S } from "@/lib/intro-timing";
 import { DEV_SHADOW_MENU_UNLOCK } from "@/lib/lighting-controls";
 
@@ -22,9 +23,18 @@ export function WaitlistLanding() {
   const { controls, update, reset } = useLightingControls();
   const [uiVisible, setUiVisible] = useState(false);
   const [windActive, setWindActive] = useState(false);
+  const [skipIntro, setSkipIntro] = useState(false);
+
+  useLayoutEffect(() => {
+    if (prefersReducedMotion || hasPlayedIntro()) {
+      setSkipIntro(true);
+      setUiVisible(true);
+      setWindActive(true);
+    }
+  }, [prefersReducedMotion]);
 
   useEffect(() => {
-    if (prefersReducedMotion) {
+    if (prefersReducedMotion || skipIntro) {
       setUiVisible(true);
       setWindActive(true);
       return;
@@ -34,7 +44,7 @@ export function WaitlistLanding() {
       (ENTRANCE_TOTAL_S + 0.2) * 1000
     );
     return () => window.clearTimeout(windAt);
-  }, [prefersReducedMotion]);
+  }, [prefersReducedMotion, skipIntro]);
 
   const windRootRef = useFoliageWind(
     !prefersReducedMotion && controls.motionEnabled,
